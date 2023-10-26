@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "bdg-editor"
+  },
+  "targets": {
+    "bdg-editor": {
+      "hosting": {
+        "bdg-editor23": [
+          "bdg-editor"
+        ]
+      }
+    }
   }
 }
