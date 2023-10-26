@@ -10,28 +10,13 @@
     </button>
 
     <div class="app-logo-title">
-      <img src="../../../../assets/logo.png" alt="" style="max-height: 40px" />
-
+      <!--       <img src="../../../../assets/logo.png" alt="" style="max-height: 40px" />
+ -->
       <span>{{ title }}</span>
     </div>
     <span class="example-spacer"></span>
     <!--     <ang23-mode-toggle></ang23-mode-toggle>
  -->
-    <a
-      mat-button
-      class="docs-button docs-navbar-hide-small"
-      href="https://github.com/blaisedegrille/angular-2023"
-      aria-label="GitHub Repository"
-    >
-      <img
-        class="logo"
-        matButtonIcon
-        src="../assets/github-circle-white-transparent.svg"
-        alt="angular"
-        aria-hidden="true"
-      />
-      <span style="color: white; padding-left: 5px"> GitHub </span>
-    </a>
   </mat-toolbar>
 </nav>
 <mat-drawer-container class="example-container" autosize>
@@ -40,8 +25,10 @@
       <mat-list-item
         *ngFor="let component of componentList"
         [routerLink]="component.route"
-        >{{ component.name }}</mat-list-item
-      >
+        ><span>{{ component.name }}</span>
+
+        <mat-icon class="pt-2" *ngIf="component.locked">lock</mat-icon>
+      </mat-list-item>
     </mat-nav-list>
   </mat-drawer>
 
