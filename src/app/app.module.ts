@@ -8,6 +8,8 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { EditorComponent } from './pages/editor/editor.component';
 import { MaterialModule } from './material.module';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
+import { HomeComponent } from './pages/home/home.component';
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -22,7 +24,7 @@ const firebaseConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent, EditorComponent],
+  declarations: [AppComponent, EditorComponent, NotFoundComponent, HomeComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

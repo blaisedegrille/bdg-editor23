@@ -1,0 +1,85 @@
+.app-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  margin-bottom: 50px;
+}
+
+.app-logo-title {
+  cursor: pointer;
+  margin: auto;
+  display: contents;
+}
+
+// teljes app
+.example-container {
+  height: 100%;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding-top: 55px;
+  display: block;
+  //   overflow-y: hidden;
+}
+
+.mat-list-item {
+  padding: 0;
+}
+
+::ng-deep .mat-drawer-container {
+  background-color: unset !important;
+}
+
+.example-sidenav-content {
+  width: 100%;
+  height: fit-content;
+  //  background: linear-gradient(to bottom, #ffffff 0%, #9c27b0 100%);
+}
+
+.example-sidenav {
+  padding-top: 56px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+//buttons
+
+section {
+  display: table;
+}
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+
+  max-width: 600px;
+}
+
+.example-button-row .mat-mdc-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}
+
+.github-logo {
+  margin-top: 6px;
+  margin-right: 6px;
+}

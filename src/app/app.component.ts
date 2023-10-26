@@ -10,9 +10,9 @@ export class AppComponent {
   title = 'bdg-editor23';
   componentList: Menu[] = [
     { name: 'Home', route: 'home' },
-    { name: 'Dashboard', route: 'dashboard' },
     { name: 'Editor', route: 'editor' },
-    { name: 'User', route: 'user' },
-    { name: 'Settings', route: 'settings' },
+    { name: 'Dashboard', route: 'dashboard', locked: true },
+    { name: 'User', route: 'user', locked: true },
+    { name: 'Settings', route: 'settings', locked: true },
   ];
 }
