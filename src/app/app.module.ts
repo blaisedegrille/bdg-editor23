@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { getFirestore, provideFirestore } from '@angular/fire/firestore';
-import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
-import { EditorComponent } from './pages/editor/editor.component';
-import { MaterialModule } from './material.module';
-import { NotFoundComponent } from './pages/not-found/not-found.component';
-import { HomeComponent } from './pages/home/home.component';
+import {AppRoutingModule} from './app-routing.module';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {AngularFireModule} from '@angular/fire/compat';
+import {AngularFireDatabase, AngularFireDatabaseModule} from '@angular/fire/compat/database';
+import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import {AngularFireStorageModule} from '@angular/fire/compat/storage';
+import {MaterialModule} from "./material.module";
+import firebase from "firebase/compat";
 
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -24,16 +23,29 @@ const firebaseConfig = {
 };
 
 @NgModule({
-  declarations: [AppComponent, EditorComponent, NotFoundComponent, HomeComponent],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
+  declarations: [AppComponent],
+  imports: [AppRoutingModule, BrowserAnimationsModule,
     MaterialModule,
-    provideFirebaseApp(() => initializeApp(firebaseConfig)),
-    provideFirestore(() => getFirestore()),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    AngularFirestoreModule,
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  // !!!! lesz egy hiba az egyik libben, amit interneten is írnak, hogy még
+  // nincs kijavítva - ezt megoldottam így:
+  // manuálisan módosítsd a filet:
+  // node_modules/@angular/fire/compat/database/interfaces.d.ts
+  // régi: extends firebase.database.DataSnapshot
+  // új: extends firebase.database.IteratedDataSnapshot
+
+  constructor(private db: AngularFireDatabase) {
+    console.log(db.database);
+    db.list('/foo');
+    // const tutorials = db.list('tutorials').valueChanges();
+    // tutorials.forEach((value) => console.log(value)).then();
+  }
+}
