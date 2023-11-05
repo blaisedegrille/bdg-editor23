@@ -3,19 +3,24 @@ import { RouterModule, Routes } from '@angular/router';
 import { EditorComponent } from './pages/editor/editor.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { HomeComponent } from './pages/home/home.component';
+import { ArticleListComponent } from './pages/article-list/article-list.component';
+import { ForgotPasswordComponent } from './pages/forgot-password/forgot-password.component';
+import { SignInComponent } from './pages/sign-in/sign-in.component';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
+import { VerifyEmailComponent } from './pages/verify-email/verify-email.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: '/sign-in', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
+  { path: 'editor', component: EditorComponent },
+  { path: 'articles', component: ArticleListComponent },
   { path: 'not-found', component: NotFoundComponent },
-  { path: 'editor', component: EditorComponent },
-  /*   { path: 'dynamic-grid', component: DynamicGridComponent },
-  { path: 'editor', component: EditorComponent },
+  { path: 'sign-in', component: SignInComponent },
+  { path: 'register-user', component: SignUpComponent },
   { path: 'dashboard', component: DashboardComponent },
-  { path: 'maintenance', component: MaintenanceComponent },
-  { path: 'datatable', component: DataTableComponent },
-  { path: 'user', component: UserComponent },
-  { path: 'settings', component: SettingsComponent }, */
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'verify-email-address', component: VerifyEmailComponent },
   { path: '**', redirectTo: 'not-found' },
 ];
 
