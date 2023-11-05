@@ -12,8 +12,8 @@ export class AppComponent {
     { name: 'Home', route: 'home' },
     { name: 'Editor', route: 'editor' },
     { name: 'Articles', route: 'articles' },
-    { name: 'Dashboard', route: 'dashboard', locked: true },
+    /*     { name: 'Dashboard', route: 'dashboard', locked: true },
     { name: 'User', route: 'user', locked: true },
-    { name: 'Settings', route: 'settings', locked: true },
+    { name: 'Settings', route: 'settings', locked: true }, */
   ];
 }
