@@ -1,0 +1,10 @@
+// mixin that enables css variables in light mode
+@mixin lighten() {
+  @include mat.all-component-themes($bdg-editor23-light-theme);
+}
+
+// mixin that enables css variables in dark mode
+@mixin darken() {
+  @include mat.all-component-themes($bdg-editor23-dark-theme);
+  color: whitesmoke;
+}
