@@ -1,45 +1,129 @@
-# BdgEditor23
+# 📚 BDG Editor 23
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6 and has since been upgraded to Angular 22.
+> A modern writing workspace built with Angular 22 — draft with Editor.js, keep
+> everything saved locally, and publish to Firebase when you are ready.
 
-## Requirements
+![Angular](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-24-339933?logo=node.js&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-Auth%20%2B%20Firestore-FFCA28?logo=firebase&logoColor=black)
+![Tests](https://img.shields.io/badge/tests-Karma%20%2F%20Jasmine-C2185B)
 
-- Node.js 24 (see `.nvmrc`) — run `nvm use` before installing dependencies.
-- Firebase web app configuration lives in `src/app/core/firebase.ts`.
+BDG Editor 23 is a single-page application for writing and managing articles. It
+combines Firebase Authentication, a local-first article store and a block-based
+Editor.js canvas, wrapped in an Angular Material 3 interface that follows your
+light or dark theme.
 
-## Articles
+## ✨ Features
 
-Articles are drafted locally in `localStorage`, scoped to the signed in user, so
-saving works offline. The **Publish** button also writes the article to
-`users/{uid}/articles/{id}` in Firestore.
+- **Email and password authentication** powered by Firebase Auth, including
+  email verification and password reset.
+- **Personal profile** with account details, verification status and writing
+  statistics.
+- **Home workspace** that greets you, surfaces quick actions and lists every
+  draft and published article.
+- **Editor.js canvas** with paragraph, heading and ordered/unordered list
+  blocks. Create a new article or revisit an existing one at `/editor/:id`.
+- **Local-first drafts** stored per user in `localStorage`, so saving works
+  offline and nothing is lost if Firebase is unreachable.
+- **Publishing to Firestore** under `users/{uid}/articles/{id}`, with a graceful
+  fallback that keeps the local draft when a publish fails.
+- **Article reader** at `/articles/:id` with a custom block renderer.
+- **Light and dark themes** driven by Angular Material system tokens.
 
-Deploy the Firestore rules once before publishing for the first time:
+## 🧱 Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | Angular 22 — standalone components, signals, `ChangeDetectionStrategy.Eager` |
+| UI | Angular Material 3 |
+| Editor | Editor.js with the header and list tools |
+| Backend | Firebase Auth + Cloud Firestore |
+| Async | RxJS |
+| Tests | Karma + Jasmine |
+
+## 🚀 Quick start
+
+The project targets Node.js 24 (see `.nvmrc`).
+
+```bash
+nvm use
+npm ci
+npm start
+```
+
+Open [http://localhost:4200](http://localhost:4200). The app starts at the home
+workspace once you are signed in, and redirects guests to the sign-in page.
+
+Firebase web app configuration lives in `src/app/core/firebase.ts`.
+
+## 🛠 Scripts
+
+| Command | What it does |
+| --- | --- |
+| `npm start` | Start the development server |
+| `npm run build` | Create a production build in `dist/bdg-editor23/browser` |
+| `npm run watch` | Rebuild on changes in development mode |
+| `npm test` | Run the unit tests with Karma in watch mode |
+
+## 🔥 Firebase setup
+
+Publishing writes to the `users/{uid}/articles/{id}` subcollection. Deploy the
+included security rules once before publishing for the first time:
 
 ```bash
 npx firebase-tools login
 npx firebase-tools deploy --only firestore:rules
 ```
 
-## Development server
+The rules are scoped so that each user can only read and write their own profile
+and articles. Deploying replaces the Firestore rules currently configured in the
+console — merge them if the project uses other collections.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🗂 Project structure
 
-## Code scaffolding
+```text
+src/app/
+├── core/       Firebase setup, auth, guards, article cloud + sync services
+├── models/     Typed domain models and article helpers
+├── pages/      Routed screens: home, profile, editor, articles, auth
+├── service/    Local-first article store
+├── shared/     Reusable UI such as the article renderer and auth card
+└── testing/    Spec stubs and fixtures
+```
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## 🧪 Testing and building
 
-## Build
+Run the full suite once in a headless browser:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/bdg-editor23/browser` directory.
+```bash
+CHROME_BIN=/usr/bin/google-chrome npx ng test --watch=false --browsers=ChromeHeadless
+```
 
-## Running unit tests
+Build for production:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npx ng build --configuration production
+```
 
-## Running end-to-end tests
+The build output is written to `dist/bdg-editor23/browser`.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## 🚢 Deployment and CI
 
-## Further help
+Hosting is configured in `firebase.json` and deployed by two GitHub Actions
+workflows:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **Merge to `main`** → `firebase-hosting-merge.yml` deploys the live channel.
+- **Pull request** → `firebase-hosting-pull-request.yml` deploys a preview
+  channel and comments the preview URL on the PR.
+
+Both workflows authenticate with the `FIREBASE_SERVICE_ACCOUNT_BDG_EDITOR`
+repository secret. The preview workflow requests `checks: write`,
+`contents: read` and `pull-requests: write` so the action can create the
+**Deploy Preview** check and post its comment.
+
+## 📝 Notes
+
+The project was originally scaffolded with Angular CLI 16.2.6 and has since been
+upgraded to Angular 22. Local drafts are stored under
+`bdg-editor23.articles.v1.<uid>`; published copies live in Firestore at
+`users/<uid>/articles/<id>`.
