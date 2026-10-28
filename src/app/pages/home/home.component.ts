@@ -1,5 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
-import { EditorService } from 'src/app/service/editor.service';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatButton, MatAnchor } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
 
@@ -10,11 +9,4 @@ import { MatDivider } from '@angular/material/divider';
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatButton, MatAnchor, MatDivider]
 })
-export class HomeComponent implements OnInit {
-  editorService = inject(EditorService);
-
-  ngOnInit(): void {
-    console.log('home oninit: ', this.editorService.data);
-    // this.editor = new EditorJS(config);
-  }
-}
+export class HomeComponent {}

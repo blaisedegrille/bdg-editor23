@@ -16,6 +16,12 @@ export const authServiceStub = {
     },
     providerData: [{ providerId: 'password' }],
   },
+  get userId(): string {
+    return 'test-uid';
+  },
+  get userLabel(): string {
+    return 'Test User';
+  },
   SignIn: () => Promise.resolve(),
   SignUp: () => Promise.resolve(),
   SendVerificationMail: () => Promise.resolve(),

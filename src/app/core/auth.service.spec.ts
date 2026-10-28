@@ -25,4 +25,14 @@ describe('AuthService', () => {
   it('should report being logged out when no user is stored', () => {
     expect(service.isLoggedIn).toBeFalse();
   });
+
+  it('exposes the cached user id and label before Firebase rehydrates', () => {
+    localStorage.setItem(
+      'user',
+      JSON.stringify({ uid: 'cached-uid', email: 'jane@example.com' })
+    );
+
+    expect(service.userId).toBe('cached-uid');
+    expect(service.userLabel).toBe('jane');
+  });
 });

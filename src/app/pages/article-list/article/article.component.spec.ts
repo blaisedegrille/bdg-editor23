@@ -1,22 +1,64 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 
+import { articleStub } from 'src/app/testing/article.stub';
 import { ArticleComponent } from './article.component';
 
 describe('ArticleComponent', () => {
   let component: ArticleComponent;
   let fixture: ComponentFixture<ArticleComponent>;
 
-  beforeEach(() => {
+  function create(overrides = {}): ComponentFixture<ArticleComponent> {
+    TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ArticleComponent],
+      providers: [provideRouter([])],
     });
-    fixture = TestBed.createComponent(ArticleComponent);
+    const created = TestBed.createComponent(ArticleComponent);
+    created.componentRef.setInput('article', articleStub(overrides));
+    created.detectChanges();
+    return created;
+  }
+
+  it('renders the article title, excerpt and draft status', () => {
+    fixture = create({ title: 'Card article' });
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(component).toBeTruthy();
+    expect(compiled.querySelector('.article-card__title')?.textContent).toContain(
+      'Card article'
+    );
+    expect(compiled.querySelector('.article-card__excerpt')?.textContent).toContain(
+      'Heading Hello world One Two'
+    );
+    expect(compiled.querySelector('.article-card__status')?.textContent).toContain(
+      'Draft'
+    );
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('shows a published badge for published articles', () => {
+    fixture = create({ publishedAt: '2026-10-28T18:00:00.000Z' });
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('.article-card__status')?.textContent).toContain(
+      'Published'
+    );
+  });
+
+  it('emits the article when delete is clicked', () => {
+    fixture = create();
+    component = fixture.componentInstance;
+    const emitted: unknown[] = [];
+    component.remove.subscribe((article) => emitted.push(article));
+
+    const deleteButton = fixture.nativeElement.querySelector(
+      'button[aria-label="Delete article"]'
+    ) as HTMLButtonElement;
+    deleteButton.click();
+
+    expect(emitted.length).toBe(1);
+    expect((emitted[0] as { id: string }).id).toBe('article-1');
   });
 });

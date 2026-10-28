@@ -1,7 +1,16 @@
-import { User as FirebaseUser } from 'firebase/auth';
+/** The parts of a user object needed to build a display label. */
+export interface UserDisplaySource {
+  displayName?: string | null;
+  email?: string | null;
+}
 
-/** Preferred label for a Firebase user: display name, then email local part. */
-export function userDisplayName(user: FirebaseUser | null): string {
+/**
+ * Preferred label for a user: display name, then email local part.
+ * Works with a live Firebase user as well as the cached localStorage copy.
+ */
+export function userDisplayName(
+  user: UserDisplaySource | null | undefined
+): string {
   if (!user) {
     return '';
   }
