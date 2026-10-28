@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RouterTestingModule } from '@angular/router/testing';
 
+import { AuthService } from 'src/app/core/auth.service';
+import { authServiceStub } from 'src/app/testing/auth-service.stub';
 import { SignUpComponent } from './sign-up.component';
 
 describe('SignUpComponent', () => {
@@ -8,7 +11,9 @@ describe('SignUpComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SignUpComponent]
+      imports: [RouterTestingModule],
+      declarations: [SignUpComponent],
+      providers: [{ provide: AuthService, useValue: authServiceStub }],
     });
     fixture = TestBed.createComponent(SignUpComponent);
     component = fixture.componentInstance;
