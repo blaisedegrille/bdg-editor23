@@ -3,6 +3,7 @@ import EditorJS from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
 import { EditorService } from 'src/app/service/editor.service';
+import { MatButton } from '@angular/material/button';
 
 const config = {
   holder: 'editorjs',
@@ -23,10 +24,10 @@ const config = {
 };
 
 @Component({
-    selector: 'app-editor',
-    templateUrl: './editor.component.html',
-    styleUrls: ['./editor.component.scss'],
-    standalone: false
+  selector: 'app-editor',
+  templateUrl: './editor.component.html',
+  styleUrls: ['./editor.component.scss'],
+  imports: [MatButton]
 })
 export class EditorComponent implements OnInit {
   // @ViewChild(EditorJS)

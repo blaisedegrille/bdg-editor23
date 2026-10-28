@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AuthService } from 'src/app/core/auth.service';
@@ -11,8 +10,7 @@ describe('DashboardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [CommonModule],
-      declarations: [DashboardComponent],
+      imports: [DashboardComponent],
       providers: [{ provide: AuthService, useValue: authServiceStub }],
     });
     fixture = TestBed.createComponent(DashboardComponent);

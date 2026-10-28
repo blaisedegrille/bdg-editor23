@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatIconModule } from '@angular/material/icon';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ModeToggleComponent } from './mode-toggle.component';
@@ -16,8 +15,7 @@ describe('ModeToggleComponent', () => {
   beforeEach(() => {
     localStorage.clear();
     TestBed.configureTestingModule({
-      imports: [MatIconModule, NoopAnimationsModule],
-      declarations: [ModeToggleComponent],
+      imports: [NoopAnimationsModule, ModeToggleComponent],
       providers: [
         ModeToggleService,
         { provide: MODE_STORAGE_SERVICE, useClass: ModeLocalStorageService },
