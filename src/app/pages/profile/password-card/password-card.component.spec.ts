@@ -1,5 +1,7 @@
 import { WritableSignal, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AuthService } from 'src/app/core/auth.service';
@@ -44,11 +46,30 @@ describe('PasswordCardComponent', () => {
 
   afterEach(() => localStorage.clear());
 
+  function panel(): MatExpansionPanel {
+    return fixture.debugElement.query(By.directive(MatExpansionPanel))
+      .componentInstance;
+  }
+
+  function header(): HTMLElement {
+    return fixture.nativeElement.querySelector(
+      'mat-expansion-panel-header'
+    ) as HTMLElement;
+  }
+
+  function expand(): void {
+    if (!panel().expanded) {
+      header().click();
+      fixture.detectChanges();
+    }
+  }
+
   function fill(
     currentPassword = 'current-pass',
     newPassword = 'new-password',
     confirmPassword = 'new-password'
   ): void {
+    expand();
     component.changeForm.setValue({
       currentPassword,
       newPassword,
@@ -58,7 +79,48 @@ describe('PasswordCardComponent', () => {
     fixture.detectChanges();
   }
 
+  it('starts collapsed', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const wrapper = compiled.querySelector(
+      '.mat-expansion-panel-content-wrapper'
+    );
+
+    expect(panel().expanded).toBe(false);
+    expect(
+      compiled.querySelector('mat-expansion-panel')?.classList
+    ).not.toContain('mat-expanded');
+    expect(wrapper?.hasAttribute('inert')).toBe(true);
+    expect(header().textContent).toContain('Security');
+  });
+
+  it('expands and collapses when the header is clicked', () => {
+    expand();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(panel().expanded).toBe(true);
+    expect(
+      compiled.querySelector('mat-expansion-panel')?.classList
+    ).toContain('mat-expanded');
+    expect(
+      compiled
+        .querySelector('.mat-expansion-panel-content-wrapper')
+        ?.hasAttribute('inert')
+    ).toBe(false);
+
+    header().click();
+    fixture.detectChanges();
+
+    expect(panel().expanded).toBe(false);
+    expect(
+      compiled
+        .querySelector('.mat-expansion-panel-content-wrapper')
+        ?.hasAttribute('inert')
+    ).toBe(true);
+  });
+
   it('renders the password form for email/password accounts', () => {
+    expand();
+
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector('form')).not.toBeNull();
@@ -66,14 +128,21 @@ describe('PasswordCardComponent', () => {
     expect(compiled.textContent).toContain('Update password');
   });
 
-  it('lists password tips beside the form', () => {
+  it('lists password tips above the form', () => {
+    expand();
+
     const compiled = fixture.nativeElement as HTMLElement;
+    const tips = compiled.querySelector('.password-card__tips') as HTMLElement;
+    const form = compiled.querySelector('form') as HTMLElement;
 
     expect(compiled.textContent).toContain('Password tips');
     expect(compiled.querySelectorAll('.password-card__tips-list li').length).toBe(
       3
     );
     expect(compiled.textContent).toContain('Pick a password');
+    expect(
+      tips.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
   });
 
   it('rejects a mismatched confirmation without calling Firebase', async () => {
@@ -135,6 +204,7 @@ describe('PasswordCardComponent', () => {
       providerData: [{ providerId: 'google.com' }],
     });
     fixture.detectChanges();
+    expand();
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('form')).toBeNull();
