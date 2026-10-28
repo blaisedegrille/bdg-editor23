@@ -1,77 +1,156 @@
-<br />
-<br />
-<br />
-
-<!-- Top navigation -->
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-  <a class="navbar-brand col-sm-3 col-md-2 mr-0">
-    <img
-      class="brand-logo"
-      src="assets/logo-positronx-white.svg"
-      alt="positronX.io Logo"
-    />
-  </a>
-</nav>
-<!-- Sidebar navigation -->
-<div class="container-fluid">
-  <div class="row">
-    <nav class="col-md-2 d-md-block bg-light sidebar">
-      <div class="sidebar-sticky">
-        <ul class="nav flex-column">
-          <li class="nav-item">
-            <a class="nav-link active">
-              <i class="fas fa-user"></i>User Profile
-            </a>
-          </li>
-          <!-- Calling SignOut() Api from AuthService -->
-          <li class="nav-item">
-            <a class="nav-link" (click)="authService.SignOut()">
-              <i class="fas fa-sign-out-alt"></i>Log out
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-    <!-- Main content -->
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-      <div class="inner-adjust">
-        <div class="pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">User Profile</h1>
-        </div>
-        <!-- Show user data when logged in -->
-        @if (authService.userData; as user) {
-          <div class="row">
-            <div class="col-md-12">
-              <div class="media">
-                <img
-                  class="align-self-start mr-5 img-thumbnail rounded-circle"
-                  src="{{
-                    user.photoURL ? user.photoURL : '/assets/dummy-user.png'
-                  }}"
-                  alt="{{ user.displayName }}"
-                />
-                <div class="media-body">
-                  <h1>
-                    Hello:
-                    <strong>{{
-                      user.displayName ? user.displayName : "User"
-                    }}</strong>
-                  </h1>
-                  <p>
-                    User ID: <strong>{{ user.uid }}</strong>
-                  </p>
-                  <p>
-                    Email: <strong>{{ user.email }}</strong>
-                  </p>
-                  <p>
-                    Email Verified: <strong>{{ user.emailVerified }}</strong>
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+<div class="dashboard">
+  @if (user; as currentUser) {
+    <section class="dashboard__hero">
+      <div class="dashboard__avatar" aria-hidden="true">
+        @if (currentUser.photoURL) {
+          <img [src]="currentUser.photoURL" alt="" />
+        } @else {
+          {{ userInitials }}
         }
       </div>
-    </main>
-  </div>
+
+      <div class="dashboard__identity">
+        <p class="dashboard__eyebrow">Your workspace</p>
+        <h1 class="dashboard__title">{{ userName }}</h1>
+        <p class="dashboard__email">
+          <mat-icon aria-hidden="true">mail_outline</mat-icon>
+          <span>{{ currentUser.email }}</span>
+        </p>
+      </div>
+
+      <mat-chip-set class="dashboard__status" aria-label="Email verification status">
+        @if (currentUser.emailVerified) {
+          <mat-chip highlighted>
+            <mat-icon matChipAvatar>verified</mat-icon>
+            Email verified
+          </mat-chip>
+        } @else {
+          <mat-chip highlighted class="dashboard__chip--warning">
+            <mat-icon matChipAvatar>pending</mat-icon>
+            Email not verified
+          </mat-chip>
+        }
+      </mat-chip-set>
+    </section>
+
+    <div class="dashboard__grid">
+      <mat-card appearance="outlined" class="dashboard__card">
+        <mat-card-header>
+          <div mat-card-avatar class="dashboard__card-icon">
+            <mat-icon>badge</mat-icon>
+          </div>
+          <mat-card-title>Account</mat-card-title>
+          <mat-card-subtitle>Who you are signed in as</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <dl class="dashboard__facts">
+            <div class="dashboard__fact">
+              <dt>Name</dt>
+              <dd>{{ currentUser.displayName || userName }}</dd>
+            </div>
+            <div class="dashboard__fact">
+              <dt>Email</dt>
+              <dd>{{ currentUser.email }}</dd>
+            </div>
+            <div class="dashboard__fact">
+              <dt>Sign-in provider</dt>
+              <dd>{{ providerLabel }}</dd>
+            </div>
+            <div class="dashboard__fact">
+              <dt>User ID</dt>
+              <dd class="dashboard__mono" [title]="currentUser.uid">
+                {{ currentUser.uid }}
+              </dd>
+            </div>
+          </dl>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="dashboard__card">
+        <mat-card-header>
+          <div mat-card-avatar class="dashboard__card-icon">
+            <mat-icon>history</mat-icon>
+          </div>
+          <mat-card-title>Activity</mat-card-title>
+          <mat-card-subtitle>Recent account activity</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <dl class="dashboard__facts">
+            <div class="dashboard__fact">
+              <dt>Member since</dt>
+              <dd>
+                @if (currentUser.metadata.creationTime) {
+                  {{ currentUser.metadata.creationTime | date: 'mediumDate' }}
+                } @else {
+                  —
+                }
+              </dd>
+            </div>
+            <div class="dashboard__fact">
+              <dt>Last sign-in</dt>
+              <dd>
+                @if (currentUser.metadata.lastSignInTime) {
+                  {{ currentUser.metadata.lastSignInTime | date: 'medium' }}
+                } @else {
+                  —
+                }
+              </dd>
+            </div>
+            <div class="dashboard__fact">
+              <dt>Email status</dt>
+              <dd>{{ currentUser.emailVerified ? 'Verified' : 'Pending' }}</dd>
+            </div>
+          </dl>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card
+        appearance="outlined"
+        class="dashboard__card dashboard__card--actions"
+      >
+        <mat-card-header>
+          <div mat-card-avatar class="dashboard__card-icon">
+            <mat-icon>rocket_launch</mat-icon>
+          </div>
+          <mat-card-title>Quick actions</mat-card-title>
+          <mat-card-subtitle>Jump straight back into writing</mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+          <div class="dashboard__actions">
+            <a mat-flat-button routerLink="/editor">
+              <mat-icon>edit_note</mat-icon>
+              New article
+            </a>
+            <a mat-stroked-button routerLink="/articles">
+              <mat-icon>article</mat-icon>
+              Browse articles
+            </a>
+            <a mat-button routerLink="/home">
+              <mat-icon>home</mat-icon>
+              Home
+            </a>
+            <button
+              mat-stroked-button
+              type="button"
+              class="dashboard__signout"
+              (click)="signOut()"
+            >
+              <mat-icon>logout</mat-icon>
+              Sign out
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  } @else {
+    <section class="dashboard__empty">
+      <mat-icon aria-hidden="true">lock_person</mat-icon>
+      <h1>You are not signed in</h1>
+      <p>Sign in to see your profile and workspace.</p>
+      <a mat-flat-button routerLink="/sign-in">Go to sign in</a>
+    </section>
+  }
 </div>

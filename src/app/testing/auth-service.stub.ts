@@ -10,6 +10,11 @@ export const authServiceStub = {
     displayName: 'Test User',
     photoURL: null,
     emailVerified: true,
+    metadata: {
+      creationTime: '2024-01-15T10:30:00.000Z',
+      lastSignInTime: '2026-10-28T18:00:00.000Z',
+    },
+    providerData: [{ providerId: 'password' }],
   },
   SignIn: () => Promise.resolve(),
   SignUp: () => Promise.resolve(),
