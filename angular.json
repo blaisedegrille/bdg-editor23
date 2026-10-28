@@ -58,10 +58,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "bdg-editor23:build:production"
+              "buildTarget": "bdg-editor23:build:production"
             },
             "development": {
-              "browserTarget": "bdg-editor23:build:development"
+              "buildTarget": "bdg-editor23:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -69,7 +69,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bdg-editor23:build"
+            "buildTarget": "bdg-editor23:build"
           }
         },
         "test": {
