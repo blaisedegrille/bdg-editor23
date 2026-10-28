@@ -1,13 +1,9 @@
-import { AuthService } from '../core/auth.service';
-
 /**
  * Minimal stand-in for `AuthService` used by component specs so that they never
- * touch a real Firebase project.
+ * touch a real Firebase project. Only the members the components actually read
+ * are populated.
  */
-export const authServiceStub: Partial<AuthService> & {
-  userData: Record<string, unknown>;
-  [key: string]: unknown;
-} = {
+export const authServiceStub = {
   userData: {
     uid: 'test-uid',
     email: 'test@example.com',

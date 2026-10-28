@@ -1,0 +1,23 @@
+<div class="auth-page">
+  <mat-card appearance="outlined" class="auth-card">
+    <mat-card-header class="auth-card__header">
+      <div mat-card-avatar class="auth-card__avatar" aria-hidden="true">
+        <mat-icon>{{ icon() }}</mat-icon>
+      </div>
+      <mat-card-title class="auth-card__title">{{ title() }}</mat-card-title>
+      @if (subtitle(); as subtitleText) {
+        <mat-card-subtitle class="auth-card__subtitle">{{
+          subtitleText
+        }}</mat-card-subtitle>
+      }
+    </mat-card-header>
+
+    <mat-card-content class="auth-card__content">
+      <ng-content />
+    </mat-card-content>
+
+    <mat-card-footer class="auth-card__footer">
+      <ng-content select="[authFooter]" />
+    </mat-card-footer>
+  </mat-card>
+</div>
