@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/bdg-editor23",
+    "public": "dist/bdg-editor23/browser",
     "rewrites": [
       {
         "source": "**",
