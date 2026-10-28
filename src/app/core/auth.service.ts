@@ -13,6 +13,7 @@ import {
 import { doc, setDoc } from 'firebase/firestore';
 
 import { User } from '../models/user';
+import { userDisplayName } from './user-display';
 import { auth, db } from './firebase';
 
 /** Human friendly messages for the Firebase auth error codes we expect to hit. */
@@ -122,6 +123,29 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user')!);
     return user !== null && user.emailVerified !== false ? true : false;
+  }
+
+  /** The user cached on the last sign-in, available before Firebase rehydrates. */
+  private get cachedUser(): {
+    uid?: string;
+    displayName?: string | null;
+    email?: string | null;
+  } | null {
+    try {
+      return JSON.parse(localStorage.getItem('user') ?? 'null');
+    } catch {
+      return null;
+    }
+  }
+
+  /** UID used to scope local data; falls back to the cached user on reload. */
+  get userId(): string | null {
+    return this.userData?.uid ?? this.cachedUser?.uid ?? null;
+  }
+
+  /** Human readable author name, also available before Firebase rehydrates. */
+  get userLabel(): string {
+    return userDisplayName(this.userData ?? this.cachedUser);
   }
 
   /* Setting up user data when sign in with username/password,

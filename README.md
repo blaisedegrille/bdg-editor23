@@ -7,6 +7,19 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 - Node.js 24 (see `.nvmrc`) — run `nvm use` before installing dependencies.
 - Firebase web app configuration lives in `src/app/core/firebase.ts`.
 
+## Articles
+
+Articles are drafted locally in `localStorage`, scoped to the signed in user, so
+saving works offline. The **Publish** button also writes the article to
+`users/{uid}/articles/{id}` in Firestore.
+
+Deploy the Firestore rules once before publishing for the first time:
+
+```bash
+npx firebase-tools login
+npx firebase-tools deploy --only firestore:rules
+```
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.

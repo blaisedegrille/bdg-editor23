@@ -1,0 +1,142 @@
+:host {
+  display: block;
+}
+
+.editor-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: min(100%, 62rem);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem) 1rem 3rem;
+  box-sizing: border-box;
+}
+
+.editor-page__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.editor-page__back {
+  flex: 0 0 auto;
+}
+
+.editor-page__title {
+  flex: 1 1 16rem;
+  min-width: 12rem;
+}
+
+::ng-deep .editor-page__title .mat-mdc-form-field-subscript-wrapper {
+  display: none;
+}
+
+.editor-page__status {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--mat-sys-corner-full);
+  background-color: var(--mat-sys-surface-container-high);
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+  white-space: nowrap;
+}
+
+.editor-page__status mat-icon {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.editor-page__status--published {
+  background-color: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.editor-page__dirty {
+  color: var(--mat-sys-error);
+  font: var(--mat-sys-label-medium);
+  white-space: nowrap;
+}
+
+.editor-page__spacer {
+  flex: 1 1 auto;
+}
+
+.editor-page__canvas {
+  padding: clamp(1rem, 3vw, 2rem);
+  min-height: 55vh;
+}
+
+.editor-page__canvas--hidden {
+  display: none;
+}
+
+.editor-page__holder {
+  min-height: 50vh;
+  outline: none;
+}
+
+.editor-page__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  padding: 4rem 1.5rem;
+  border-radius: var(--mat-sys-corner-large);
+  background-color: var(--mat-sys-surface-container);
+  text-align: center;
+}
+
+.editor-page__empty mat-icon {
+  color: var(--mat-sys-primary);
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.editor-page__empty h2 {
+  margin: 0;
+  font: var(--mat-sys-headline-small);
+}
+
+.editor-page__empty p {
+  max-width: 32rem;
+  margin: 0 0 0.5rem;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-medium);
+}
+
+@media (max-width: 640px) {
+  .editor-page__spacer {
+    display: none;
+  }
+
+  .editor-page__toolbar button[mat-flat-button],
+  .editor-page__toolbar button[mat-stroked-button] {
+    flex: 1 1 auto;
+  }
+}
+
+// Editor.js renders outside Angular's style encapsulation.
+:host ::ng-deep {
+  .editor-page__holder .ce-paragraph {
+    font: var(--mat-sys-body-large);
+    line-height: 1.7;
+  }
+
+  .editor-page__holder .ce-header {
+    color: var(--mat-sys-on-surface);
+  }
+
+  .editor-page__holder .ce-placeholder {
+    color: var(--mat-sys-on-surface-variant);
+  }
+
+  .editor-page__holder .ce-block__content,
+  .editor-page__holder .ce-toolbar__content {
+    max-width: none;
+  }
+}
