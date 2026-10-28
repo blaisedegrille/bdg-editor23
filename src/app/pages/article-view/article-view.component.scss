@@ -1,0 +1,111 @@
+:host {
+  display: block;
+}
+
+.article-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: min(100%, 48rem);
+  margin: 0 auto;
+  padding: clamp(1rem, 3vw, 2rem) 1rem 3rem;
+  box-sizing: border-box;
+}
+
+.article-view__topbar {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.article-view__spacer {
+  flex: 1 1 auto;
+}
+
+.article-view__article {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+  background-color: var(--mat-sys-surface-container-low);
+  box-shadow: var(--mat-sys-level1);
+}
+
+.article-view__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.article-view__header h1 {
+  margin: 0;
+  font: var(--mat-sys-headline-medium);
+  line-height: 1.2;
+}
+
+.article-view__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-large);
+}
+
+.article-view__meta > span {
+  display: inline-flex;
+  gap: 0.25rem;
+  align-items: center;
+}
+
+.article-view__meta mat-icon {
+  font-size: 1rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.article-view__status {
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--mat-sys-corner-full);
+  background-color: var(--mat-sys-surface-container-high);
+}
+
+.article-view__loading {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 1rem;
+  color: var(--mat-sys-on-surface-variant);
+}
+
+.article-view__empty {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+  padding: 4rem 1.5rem;
+  border-radius: var(--mat-sys-corner-large);
+  background-color: var(--mat-sys-surface-container);
+  text-align: center;
+}
+
+.article-view__empty mat-icon {
+  color: var(--mat-sys-primary);
+  font-size: 3rem;
+  width: 3rem;
+  height: 3rem;
+}
+
+.article-view__empty h1 {
+  margin: 0;
+  font: var(--mat-sys-headline-small);
+}
+
+.article-view__empty p {
+  max-width: 32rem;
+  margin: 0 0 0.5rem;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-medium);
+}

@@ -1,4 +1,39 @@
-<div class="container">
-  <h1>Cikkek</h1>
-  <app-article></app-article>
+<div class="articles-page">
+  <header class="articles-page__header">
+    <div>
+      <h1>Your articles</h1>
+      <p>Drafts are saved on this device; published copies also live in Firebase.</p>
+    </div>
+
+    <div class="articles-page__actions">
+      @if (syncing()) {
+        <span class="articles-page__syncing">
+          <mat-spinner diameter="16" />
+          Syncing…
+        </span>
+      }
+      <a mat-flat-button routerLink="/editor">
+        <mat-icon>add</mat-icon>
+        New article
+      </a>
+    </div>
+  </header>
+
+  @if (articleService.articles().length) {
+    <div class="articles-page__grid">
+      @for (article of articleService.articles(); track article.id) {
+        <app-article [article]="article" (remove)="remove($event)" />
+      }
+    </div>
+  } @else {
+    <div class="articles-page__empty">
+      <mat-icon aria-hidden="true">article</mat-icon>
+      <h2>No articles yet</h2>
+      <p>Start with a title and a few blocks — saving is instant and local.</p>
+      <a mat-flat-button routerLink="/editor">
+        <mat-icon>edit_note</mat-icon>
+        Write your first article
+      </a>
+    </div>
+  }
 </div>

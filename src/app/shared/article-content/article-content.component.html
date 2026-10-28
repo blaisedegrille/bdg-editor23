@@ -1,0 +1,46 @@
+<div class="article-content">
+  @for (block of blocks(); track block.id ?? $index) {
+    @switch (block.type) {
+      @case ('header') {
+        @if (level(block) === 3) {
+          <h3>{{ text(block) }}</h3>
+        } @else if (level(block) >= 4) {
+          <h4>{{ text(block) }}</h4>
+        } @else {
+          <h2>{{ text(block) }}</h2>
+        }
+      }
+      @case ('list') {
+        @if (style(block) === 'ordered') {
+          <ol>
+            @for (item of items(block); track $index) {
+              <li [innerHTML]="itemText(item)"></li>
+            }
+          </ol>
+        } @else {
+          <ul>
+            @for (item of items(block); track $index) {
+              <li [innerHTML]="itemText(item)"></li>
+            }
+          </ul>
+        }
+      }
+      @case ('quote') {
+        <blockquote>
+          <p [innerHTML]="text(block)"></p>
+          @if (caption(block)) {
+            <cite>{{ caption(block) }}</cite>
+          }
+        </blockquote>
+      }
+      @case ('delimiter') {
+        <hr />
+      }
+      @default {
+        @if (text(block)) {
+          <p [innerHTML]="text(block)"></p>
+        }
+      }
+    }
+  }
+</div>
