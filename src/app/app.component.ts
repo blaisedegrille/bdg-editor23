@@ -6,14 +6,13 @@ import { MatIcon } from '@angular/material/icon';
 import { ModeToggleComponent } from './shared/mode-toggle/mode-toggle.component';
 import { MatDrawerContainer, MatDrawer } from '@angular/material/sidenav';
 import { MatNavList, MatListItem } from '@angular/material/list';
-import { NgFor, NgIf } from '@angular/common';
 import { RouterLink, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [MatToolbar, MatIconButton, MatIcon, ModeToggleComponent, MatDrawerContainer, MatDrawer, MatNavList, NgFor, MatListItem, RouterLink, NgIf, RouterOutlet]
+  imports: [MatToolbar, MatIconButton, MatIcon, ModeToggleComponent, MatDrawerContainer, MatDrawer, MatNavList, MatListItem, RouterLink, RouterOutlet]
 })
 export class AppComponent {
   title = 'bdg-editor23';
