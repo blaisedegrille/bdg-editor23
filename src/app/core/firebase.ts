@@ -1,20 +1,13 @@
 import { getApp, getApps, initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { environment } from '../../environments/environment';
 
 /**
- * Your web app's Firebase configuration.
- * For Firebase JS SDK v7.20.0 and later, measurementId is optional.
+ * The web app configuration is generated locally or in CI; it is never committed.
+ * See README.md ("Firebase setup") and `src/environments/environment.example.ts`.
  */
-export const firebaseConfig = {
-  apiKey: 'REDACTED_FIREBASE_API_KEY',
-  authDomain: 'bdg-editor.firebaseapp.com',
-  projectId: 'bdg-editor',
-  storageBucket: 'bdg-editor.appspot.com',
-  messagingSenderId: 'REDACTED_FIREBASE_MESSAGING_SENDER_ID',
-  appId: 'REDACTED_FIREBASE_APP_ID',
-  measurementId: 'REDACTED_FIREBASE_MEASUREMENT_ID',
-};
+export const firebaseConfig = environment.firebase;
 
 /**
  * Reuses an already initialized app (relevant when the module is imported more

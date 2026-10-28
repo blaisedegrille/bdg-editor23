@@ -3,9 +3,15 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "config:firebase": "node scripts/generate-firebase-env.mjs",
+    "test:config": "node --test scripts/generate-firebase-env.spec.mjs",
+    "prestart": "npm run config:firebase",
     "start": "ng serve",
+    "prebuild": "npm run config:firebase",
     "build": "ng build",
+    "prewatch": "npm run config:firebase",
     "watch": "ng build --watch --configuration development",
+    "pretest": "npm run config:firebase",
     "test": "ng test"
   },
   "private": true,

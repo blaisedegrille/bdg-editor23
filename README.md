@@ -61,7 +61,34 @@ npm start
 Open [http://localhost:4200](http://localhost:4200). The app starts at the home
 workspace once you are signed in, and redirects guests to the sign-in page.
 
-Firebase web app configuration lives in `src/app/core/firebase.ts`.
+### Firebase web config
+
+The Firebase web app configuration is **not committed**. It is written to the
+gitignored `src/environments/environment.ts` by `npm run config:firebase`, which
+runs automatically before `start`, `build`, `watch` and `test`.
+
+For local development, save the JSON shown in the Firebase console under
+*Project settings → Your apps → SDK setup and configuration* as
+`firebase.web-config.local.json` in the repository root (also gitignored):
+
+```json
+{
+  "apiKey": "…",
+  "authDomain": "bdg-editor.firebaseapp.com",
+  "projectId": "bdg-editor",
+  "storageBucket": "bdg-editor.appspot.com",
+  "messagingSenderId": "…",
+  "appId": "…",
+  "measurementId": "…"
+}
+```
+
+Alternatively export the same JSON as `FIREBASE_WEB_CONFIG`; the environment
+variable takes precedence over the local file. Without either one the generator
+falls back to `src/environments/environment.example.ts`, so the project still
+compiles and the unit tests run, but sign-in and cloud publishing are disabled
+until real values are supplied. `ng serve`/`ng build`/`ng test` invoked directly
+require the generated file, so run `npm run config:firebase` once after cloning.
 
 ## 🛠 Scripts
 
@@ -71,6 +98,8 @@ Firebase web app configuration lives in `src/app/core/firebase.ts`.
 | `npm run build` | Create a production build in `dist/bdg-editor23/browser` |
 | `npm run watch` | Rebuild on changes in development mode |
 | `npm test` | Run the unit tests with Karma in watch mode |
+| `npm run config:firebase` | Generate the gitignored Firebase environment file |
+| `npm run test:config` | Unit-test the config generator with Node's test runner |
 
 ## 🔥 Firebase setup
 
@@ -127,6 +156,18 @@ Both workflows authenticate with the `FIREBASE_SERVICE_ACCOUNT_BDG_EDITOR`
 repository secret. The preview workflow requests `checks: write`,
 `contents: read` and `pull-requests: write` so the action can create the
 **Deploy Preview** check and post its comment.
+
+Deploys also need a second repository secret, `FIREBASE_WEB_CONFIG`, containing
+the same web app JSON described above. Both workflows run
+`npm run config:firebase -- --strict` before building, so a missing secret or
+placeholder values fail the job instead of deploying an app that cannot sign in.
+Rotate it in *Settings → Secrets and variables → Actions*.
+
+> Firebase **web** config is public client configuration: it is compiled into the
+> shipped JavaScript and visible to every browser. Keeping it out of the
+> repository is hygiene, not secrecy. Protect the project with restrictive
+> Firestore rules and by restricting the API key to the app's domains and the
+> APIs it uses in Google Cloud Console.
 
 ## 📝 Notes
 

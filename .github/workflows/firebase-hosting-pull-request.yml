@@ -21,7 +21,12 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci && npm run build
+      - run: npm ci
+      - name: Generate Firebase web config
+        run: npm run config:firebase -- --strict
+        env:
+          FIREBASE_WEB_CONFIG: ${{ secrets.FIREBASE_WEB_CONFIG }}
+      - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
