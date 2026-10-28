@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Menu } from './models/menu';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatIconButton } from '@angular/material/button';
@@ -12,6 +12,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatToolbar, MatIconButton, MatIcon, ModeToggleComponent, MatDrawerContainer, MatDrawer, MatNavList, MatListItem, RouterLink, RouterOutlet]
 })
 export class AppComponent {
