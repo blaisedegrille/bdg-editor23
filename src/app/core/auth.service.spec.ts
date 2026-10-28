@@ -34,5 +34,6 @@ describe('AuthService', () => {
 
     expect(service.userId).toBe('cached-uid');
     expect(service.userLabel).toBe('jane');
+    expect(service.userEmail).toBe('jane@example.com');
   });
 });

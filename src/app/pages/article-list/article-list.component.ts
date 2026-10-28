@@ -12,6 +12,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 
 import { ArticleCloudService } from 'src/app/core/article-cloud.service';
+import { ArticleSyncService } from 'src/app/core/article-sync.service';
 import { AuthService } from 'src/app/core/auth.service';
 import { Article } from 'src/app/models/article';
 import { ArticleService } from 'src/app/service/article.service';
@@ -34,26 +35,16 @@ import { ArticleComponent } from './article/article.component';
 export class ArticleListComponent implements OnInit {
   private readonly cloud = inject(ArticleCloudService);
   private readonly authService = inject(AuthService);
+  private readonly syncService = inject(ArticleSyncService);
   private readonly snackBar = inject(MatSnackBar);
 
   readonly articleService = inject(ArticleService);
   readonly syncing = signal(false);
 
   async ngOnInit(): Promise<void> {
-    this.articleService.reload();
-
-    const uid = this.authService.userId;
-    if (!uid) {
-      return;
-    }
-
     this.syncing.set(true);
     try {
-      const remote = await this.cloud.fetchAll(uid);
-      this.articleService.mergeCloud(remote);
-    } catch (error) {
-      // Offline or missing Firestore rules: local drafts still work.
-      console.warn('Could not load published articles.', error);
+      await this.syncService.sync();
     } finally {
       this.syncing.set(false);
     }

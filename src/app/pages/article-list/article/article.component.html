@@ -31,14 +31,16 @@
 
     <span class="article-card__spacer"></span>
 
-    <button
-      mat-icon-button
-      type="button"
-      aria-label="Delete article"
-      (click)="remove.emit(article())"
-    >
-      <mat-icon>delete_outline</mat-icon>
-    </button>
+    @if (showDelete()) {
+      <button
+        mat-icon-button
+        type="button"
+        aria-label="Delete article"
+        (click)="remove.emit(article())"
+      >
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    }
     <a mat-button [routerLink]="['/articles', article().id]">Read</a>
     <a mat-button [routerLink]="['/editor', article().id]">Edit</a>
   </mat-card-actions>

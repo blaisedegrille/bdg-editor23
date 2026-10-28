@@ -23,6 +23,8 @@ import { Article, articleExcerpt } from 'src/app/models/article';
 })
 export class ArticleComponent {
   readonly article = input.required<Article>();
+  /** Hides the delete button on read-only feeds such as the home page. */
+  readonly showDelete = input(true);
   readonly remove = output<Article>();
 
   readonly excerpt = computed(() => articleExcerpt(this.article()));

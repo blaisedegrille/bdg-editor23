@@ -9,7 +9,10 @@ describe('ArticleComponent', () => {
   let component: ArticleComponent;
   let fixture: ComponentFixture<ArticleComponent>;
 
-  function create(overrides = {}): ComponentFixture<ArticleComponent> {
+  function create(
+    overrides = {},
+    showDelete = true
+  ): ComponentFixture<ArticleComponent> {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       imports: [NoopAnimationsModule, ArticleComponent],
@@ -17,6 +20,7 @@ describe('ArticleComponent', () => {
     });
     const created = TestBed.createComponent(ArticleComponent);
     created.componentRef.setInput('article', articleStub(overrides));
+    created.componentRef.setInput('showDelete', showDelete);
     created.detectChanges();
     return created;
   }
@@ -45,6 +49,16 @@ describe('ArticleComponent', () => {
     expect(compiled.querySelector('.article-card__status')?.textContent).toContain(
       'Published'
     );
+  });
+
+  it('hides the delete action when the card is read-only', () => {
+    fixture = create({}, false);
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(
+      compiled.querySelector('button[aria-label="Delete article"]')
+    ).toBeNull();
+    expect(compiled.textContent).toContain('Read');
   });
 
   it('emits the article when delete is clicked', () => {
