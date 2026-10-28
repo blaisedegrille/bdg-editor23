@@ -23,7 +23,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { AuthCardComponent } from 'src/app/shared/auth-card/auth-card.component';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 /** Requires the two password fields of the group to hold the same value. */
 function passwordsMatch(group: AbstractControl): ValidationErrors | null {
@@ -64,12 +66,15 @@ class ConfirmPasswordErrorStateMatcher implements ErrorStateMatcher {
     MatInputModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    TranslatePipe,
   ],
 })
 export class SignUpComponent {
   private readonly authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly formBuilder = inject(FormBuilder);
+
+  readonly i18n = inject(I18nService);
 
   readonly signUpForm = this.formBuilder.nonNullable.group(
     {
@@ -120,17 +125,19 @@ export class SignUpComponent {
       const { email, password } = this.signUpForm.getRawValue();
       await this.authService.SignUp(email, password);
       this.snackBar.open(
-        'Account created. Check your inbox to verify your email address.',
-        'Dismiss',
+        this.i18n.t('auth.signUp.success'),
+        this.i18n.t('common.dismiss'),
         { duration: 6000 }
       );
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
-          : 'Unable to create your account. Please try again.';
+          : this.i18n.t('auth.error.signUp');
       this.errorMessage.set(message);
-      this.snackBar.open(message, 'Dismiss', { duration: 6000 });
+      this.snackBar.open(message, this.i18n.t('common.dismiss'), {
+        duration: 6000,
+      });
     } finally {
       this.submitting.set(false);
     }

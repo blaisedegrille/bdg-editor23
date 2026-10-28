@@ -13,37 +13,35 @@
       </span>
 
       <div class="home__intro">
-        <p class="home__eyebrow">Your workspace</p>
+        <p class="home__eyebrow">{{ 'home.workspace' | t }}</p>
         <h1 class="home__title">{{ greeting }}, {{ userName }}</h1>
-        <p class="home__subtitle">
-          Pick up a draft or start something new — everything is saved as you go.
-        </p>
+        <p class="home__subtitle">{{ 'home.subtitle' | t }}</p>
       </div>
     </div>
 
-    <div class="home__stats" aria-label="Article statistics">
+    <div class="home__stats" [attr.aria-label]="'home.stats.aria' | t">
       <div class="home__stat">
         <span class="home__stat-value">{{ articleCount }}</span>
-        <span class="home__stat-label">Articles</span>
+        <span class="home__stat-label">{{ 'home.stats.articles' | t }}</span>
       </div>
       <div class="home__stat">
         <span class="home__stat-value">{{ draftCount }}</span>
-        <span class="home__stat-label">Drafts</span>
+        <span class="home__stat-label">{{ 'home.stats.drafts' | t }}</span>
       </div>
       <div class="home__stat">
         <span class="home__stat-value">{{ publishedCount }}</span>
-        <span class="home__stat-label">Published</span>
+        <span class="home__stat-label">{{ 'home.stats.published' | t }}</span>
       </div>
     </div>
 
     <div class="home__actions">
       <a mat-flat-button routerLink="/editor">
         <mat-icon>edit_note</mat-icon>
-        New article
+        {{ 'home.actions.new' | t }}
       </a>
       <a mat-stroked-button routerLink="/articles">
         <mat-icon>article</mat-icon>
-        Manage articles
+        {{ 'home.actions.manage' | t }}
       </a>
     </div>
   </section>
@@ -51,14 +49,14 @@
   <section class="home__articles">
     <header class="home__section-header">
       <div>
-        <h2>Your articles</h2>
-        <p>Every draft and published story, newest first.</p>
+        <h2>{{ 'home.articles.title' | t }}</h2>
+        <p>{{ 'home.articles.subtitle' | t }}</p>
       </div>
 
       @if (syncing()) {
         <span class="home__syncing">
           <mat-spinner diameter="16" />
-          Syncing…
+          {{ 'common.syncing' | t }}
         </span>
       }
     </header>
@@ -72,16 +70,16 @@
     } @else if (syncing()) {
       <div class="home__loading">
         <mat-spinner diameter="28" />
-        <span>Loading your articles…</span>
+        <span>{{ 'home.loading' | t }}</span>
       </div>
     } @else {
       <div class="home__empty">
         <mat-icon aria-hidden="true">article</mat-icon>
-        <h2>No articles yet</h2>
-        <p>Start with a title and a few blocks — saving is instant and local.</p>
+        <h2>{{ 'home.empty.title' | t }}</h2>
+        <p>{{ 'home.empty.body' | t }}</p>
         <a mat-flat-button routerLink="/editor">
           <mat-icon>edit_note</mat-icon>
-          Write your first article
+          {{ 'home.empty.action' | t }}
         </a>
       </div>
     }

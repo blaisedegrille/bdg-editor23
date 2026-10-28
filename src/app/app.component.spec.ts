@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDrawer } from '@angular/material/sidenav';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './core/auth.service';
+import { UserPreferencesService } from './core/user-preferences.service';
 import {
   MODE_STORAGE_SERVICE,
   ModeLocalStorageService,
@@ -16,6 +19,7 @@ describe('AppComponent', () => {
 
   beforeEach(() => {
     localStorage.clear();
+    localStorage.setItem('bdg-editor23.language.v1', 'en');
     signOutSpy = jasmine.createSpy('SignOut').and.resolveTo();
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, NoopAnimationsModule, AppComponent],
@@ -26,6 +30,8 @@ describe('AppComponent', () => {
           provide: AuthService,
           useValue: { ...authServiceStub, SignOut: signOutSpy },
         },
+        // The real service talks to Firestore; the shell only needs it alive.
+        { provide: UserPreferencesService, useValue: {} },
       ],
     });
   });
@@ -109,5 +115,21 @@ describe('AppComponent', () => {
     logout.click();
 
     expect(signOutSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes the navigation drawer after selecting an entry', () => {
+    const fixture = createApp();
+    const drawer = fixture.debugElement.query(By.directive(MatDrawer))
+      .componentInstance as MatDrawer;
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    drawer.open();
+    fixture.detectChanges();
+    expect(drawer.opened).toBeTrue();
+
+    (compiled.querySelector('mat-list-item') as HTMLElement).click();
+    fixture.detectChanges();
+
+    expect(drawer.opened).toBeFalse();
   });
 });

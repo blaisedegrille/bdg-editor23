@@ -3,37 +3,37 @@
     <a
       mat-icon-button
       routerLink="/articles"
-      aria-label="Back to articles"
+      [attr.aria-label]="'editor.back' | t"
       class="editor-page__back"
     >
       <mat-icon>arrow_back</mat-icon>
     </a>
 
     <mat-form-field appearance="outline" class="editor-page__title">
-      <mat-label>Article title</mat-label>
+      <mat-label>{{ 'editor.title.label' | t }}</mat-label>
       <input
         matInput
         [value]="title()"
         (input)="onTitleInput($event)"
-        placeholder="Untitled article"
-        aria-label="Article title"
+        [placeholder]="'editor.title.placeholder' | t"
+        [attr.aria-label]="'editor.title.label' | t"
       />
     </mat-form-field>
 
     @if (currentArticle()?.publishedAt) {
       <span class="editor-page__status editor-page__status--published">
         <mat-icon aria-hidden="true">cloud_done</mat-icon>
-        Published
+        {{ 'editor.published' | t }}
       </span>
     } @else {
       <span class="editor-page__status">
         <mat-icon aria-hidden="true">edit_note</mat-icon>
-        Draft
+        {{ 'editor.draft' | t }}
       </span>
     }
 
     @if (dirty()) {
-      <span class="editor-page__dirty">Unsaved changes</span>
+      <span class="editor-page__dirty">{{ 'editor.unsaved' | t }}</span>
     }
 
     <span class="editor-page__spacer"></span>
@@ -42,7 +42,7 @@
       <button
         mat-icon-button
         type="button"
-        aria-label="Delete article"
+        [attr.aria-label]="'editor.deleteAria' | t"
         (click)="deleteArticle()"
       >
         <mat-icon>delete_outline</mat-icon>
@@ -56,7 +56,7 @@
       (click)="saveDraft()"
     >
       <mat-icon>save</mat-icon>
-      {{ saving() ? 'Saving…' : 'Save draft' }}
+      {{ (saving() ? 'editor.saving' : 'editor.save') | t }}
     </button>
 
     <button
@@ -66,19 +66,18 @@
       (click)="publish()"
     >
       <mat-icon>cloud_upload</mat-icon>
-      {{ publishing() ? 'Publishing…' : 'Publish' }}
+      {{ (publishing() ? 'editor.publishing' : 'editor.publish') | t }}
     </button>
   </header>
 
   @if (notFound()) {
     <div class="editor-page__empty" role="status">
       <mat-icon aria-hidden="true">search_off</mat-icon>
-      <h2>Article not found</h2>
-      <p>
-        It may have been deleted on this device. Published copies are loaded
-        when you are online.
-      </p>
-      <a mat-flat-button routerLink="/articles">Back to articles</a>
+      <h2>{{ 'editor.notFound.title' | t }}</h2>
+      <p>{{ 'editor.notFound.body' | t }}</p>
+      <a mat-flat-button routerLink="/articles">
+        {{ 'editor.notFound.back' | t }}
+      </a>
     </div>
   }
 

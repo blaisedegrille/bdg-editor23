@@ -1,6 +1,6 @@
 <app-auth-card
-  title="Welcome back"
-  subtitle="Sign in to continue writing and publishing."
+  [title]="'auth.signIn.title' | t"
+  [subtitle]="'auth.signIn.subtitle' | t"
   icon="auto_stories"
 >
   <form
@@ -17,7 +17,7 @@
     }
 
     <mat-form-field appearance="outline" class="auth-field">
-      <mat-label>Email</mat-label>
+      <mat-label>{{ 'auth.email' | t }}</mat-label>
       <mat-icon matPrefix aria-hidden="true">mail_outline</mat-icon>
       <input
         matInput
@@ -28,14 +28,14 @@
         required
       />
       @if (email.hasError('required')) {
-        <mat-error>Email is required.</mat-error>
+        <mat-error>{{ 'auth.emailRequired' | t }}</mat-error>
       } @else if (email.hasError('email')) {
-        <mat-error>Enter a valid email address.</mat-error>
+        <mat-error>{{ 'auth.emailInvalid' | t }}</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="auth-field">
-      <mat-label>Password</mat-label>
+      <mat-label>{{ 'auth.password' | t }}</mat-label>
       <mat-icon matPrefix aria-hidden="true">lock_outline</mat-icon>
       <input
         matInput
@@ -48,7 +48,9 @@
         mat-icon-button
         matSuffix
         type="button"
-        [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'"
+        [attr.aria-label]="
+          (hidePassword() ? 'auth.showPassword' : 'auth.hidePassword') | t
+        "
         [attr.aria-pressed]="!hidePassword()"
         (click)="togglePasswordVisibility()"
       >
@@ -57,12 +59,14 @@
         }}</mat-icon>
       </button>
       @if (password.hasError('required')) {
-        <mat-error>Password is required.</mat-error>
+        <mat-error>{{ 'auth.passwordRequired' | t }}</mat-error>
       }
     </mat-form-field>
 
     <div class="auth-form__links">
-      <a mat-button routerLink="/forgot-password">Forgot password?</a>
+      <a mat-button routerLink="/forgot-password">
+        {{ 'auth.signIn.forgot' | t }}
+      </a>
     </div>
 
     <button
@@ -76,17 +80,19 @@
           class="auth-form__spinner"
           diameter="18"
           mode="indeterminate"
-          aria-label="Signing in"
+          [attr.aria-label]="'auth.spinner.signingIn' | t"
         />
-        <span>Signing in…</span>
+        <span>{{ 'auth.signIn.submitting' | t }}</span>
       } @else {
-        <span>Sign in</span>
+        <span>{{ 'auth.signIn.submit' | t }}</span>
       }
     </button>
   </form>
 
   <div authFooter class="auth-footer">
-    <span>New to BDG Editor?</span>
-    <a mat-button routerLink="/register-user">Create an account</a>
+    <span>{{ 'auth.signIn.footer' | t }}</span>
+    <a mat-button routerLink="/register-user">
+      {{ 'auth.signIn.create' | t }}
+    </a>
   </div>
 </app-auth-card>

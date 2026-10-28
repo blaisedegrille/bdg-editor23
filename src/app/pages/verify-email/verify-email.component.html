@@ -1,6 +1,6 @@
 <app-auth-card
-  title="Check your inbox"
-  subtitle="We've sent a verification link to confirm your email address."
+  [title]="'auth.verify.title' | t"
+  [subtitle]="'auth.verify.subtitle' | t"
   icon="mark_email_read"
 >
   @if (authService.userData; as user) {
@@ -10,10 +10,7 @@
     </p>
   }
 
-  <p class="verify-email__text">
-    Click the link in the email to activate your account. If you don't see it,
-    check your spam folder or resend it below.
-  </p>
+  <p class="verify-email__text">{{ 'auth.verify.body' | t }}</p>
 
   @if (errorMessage(); as message) {
     <div class="auth-alert" role="alert">
@@ -35,16 +32,16 @@
         class="verify-email__spinner"
         diameter="18"
         mode="indeterminate"
-        aria-label="Resending verification email"
+        [attr.aria-label]="'auth.spinner.resending' | t"
       />
-      <span>Sending…</span>
+      <span>{{ 'auth.verify.resending' | t }}</span>
     } @else {
-      <span>Resend verification email</span>
+      <span>{{ 'auth.verify.resend' | t }}</span>
     }
   </button>
 
   <div authFooter class="auth-footer">
-    <span>Already verified?</span>
-    <a mat-button routerLink="/sign-in">Back to sign in</a>
+    <span>{{ 'auth.verify.footer' | t }}</span>
+    <a mat-button routerLink="/sign-in">{{ 'auth.verify.back' | t }}</a>
   </div>
 </app-auth-card>

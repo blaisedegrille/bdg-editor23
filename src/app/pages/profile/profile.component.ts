@@ -12,8 +12,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { userInitials as toInitials } from 'src/app/core/user-display';
 import { ArticleService } from 'src/app/service/article.service';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
+import { LanguageCardComponent } from './language-card/language-card.component';
+import { PasswordCardComponent } from './password-card/password-card.component';
 
 @Component({
   selector: 'app-profile',
@@ -27,11 +31,16 @@ import { ArticleService } from 'src/app/service/article.service';
     MatCardModule,
     MatChipsModule,
     MatIconModule,
+    TranslatePipe,
+    LanguageCardComponent,
+    PasswordCardComponent,
   ],
 })
 export class ProfileComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly articleService = inject(ArticleService);
+
+  readonly i18n = inject(I18nService);
 
   get user() {
     return this.authService.userData;
@@ -63,7 +72,9 @@ export class ProfileComponent implements OnInit {
     if (!providerId) {
       return '—';
     }
-    return providerId === 'password' ? 'Email and password' : providerId;
+    return providerId === 'password'
+      ? this.i18n.t('profile.provider.password')
+      : providerId;
   }
 
   get articleCount(): number {

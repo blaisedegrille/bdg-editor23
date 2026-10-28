@@ -3,13 +3,17 @@
     <button
       mat-icon-button
       class="app-toolbar__menu"
-      aria-label="Toggle navigation menu"
+      [attr.aria-label]="'app.toolbar.toggleMenu' | t"
       (click)="drawer.toggle()"
     >
       <mat-icon>menu</mat-icon>
     </button>
 
-    <a class="app-brand" routerLink="/home" aria-label="Go to the home page">
+    <a
+      class="app-brand"
+      routerLink="/home"
+      [attr.aria-label]="'app.brand.home' | t"
+    >
       <span class="app-brand__badge">
         <mat-icon>auto_stories</mat-icon>
       </span>
@@ -23,8 +27,10 @@
         class="app-user"
         routerLink="/profile"
         routerLinkActive="app-user--active"
-        [attr.aria-label]="'Open profile for ' + (userName || 'this user')"
-        matTooltip="Your profile"
+        [attr.aria-label]="
+          'app.profile.aria' | t: { name: userName || ('app.profile.thisUser' | t) }
+        "
+        [matTooltip]="'app.profile.tooltip' | t"
       >
         <span class="app-user__avatar" aria-hidden="true">
           @if (authService.userData?.photoURL) {
@@ -42,8 +48,8 @@
       <button
         mat-icon-button
         class="app-toolbar__logout"
-        aria-label="Sign out"
-        matTooltip="Sign out"
+        [attr.aria-label]="'app.signOut' | t"
+        [matTooltip]="'app.signOut' | t"
         (click)="signOut()"
       >
         <mat-icon>logout</mat-icon>
@@ -58,15 +64,16 @@
 
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side">
-    <p class="example-sidenav__label">Workspace</p>
+    <p class="example-sidenav__label">{{ 'app.nav.workspace' | t }}</p>
     <mat-nav-list #components>
       @for (component of componentList; track component.route) {
         <mat-list-item
           [routerLink]="component.route"
           routerLinkActive="active-link"
+          (click)="drawer.close()"
         >
           <mat-icon matListItemIcon>{{ component.icon }}</mat-icon>
-          <span matListItemTitle>{{ component.name }}</span>
+          <span matListItemTitle>{{ component.labelKey | t }}</span>
 
           @if (component.locked) {
             <mat-icon class="pt-2">lock</mat-icon>

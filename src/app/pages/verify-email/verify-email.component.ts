@@ -11,7 +11,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { AuthCardComponent } from 'src/app/shared/auth-card/auth-card.component';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 @Component({
   selector: 'app-verify-email',
@@ -25,10 +27,12 @@ import { AuthCardComponent } from 'src/app/shared/auth-card/auth-card.component'
     MatIconModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    TranslatePipe,
   ],
 })
 export class VerifyEmailComponent {
   readonly authService = inject(AuthService);
+  readonly i18n = inject(I18nService);
   private readonly snackBar = inject(MatSnackBar);
 
   readonly resending = signal(false);
@@ -39,16 +43,22 @@ export class VerifyEmailComponent {
     this.resending.set(true);
     try {
       await this.authService.SendVerificationMail();
-      this.snackBar.open('Verification email sent. Check your inbox.', 'Dismiss', {
-        duration: 6000,
-      });
+      this.snackBar.open(
+        this.i18n.t('auth.verify.success'),
+        this.i18n.t('common.dismiss'),
+        {
+          duration: 6000,
+        }
+      );
     } catch (error) {
       const message =
         error instanceof Error
           ? error.message
-          : 'Unable to resend the verification email. Please try again.';
+          : this.i18n.t('auth.error.verify');
       this.errorMessage.set(message);
-      this.snackBar.open(message, 'Dismiss', { duration: 6000 });
+      this.snackBar.open(message, this.i18n.t('common.dismiss'), {
+        duration: 6000,
+      });
     } finally {
       this.resending.set(false);
     }

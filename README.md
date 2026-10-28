@@ -19,6 +19,13 @@ light or dark theme.
   email verification and password reset.
 - **Personal profile** with account details, verification status and writing
   statistics.
+- **Three interface languages** — English, German and Hungarian — switchable
+  from the profile. The choice applies to the whole app instantly, is cached on
+  the device and is synced to `users/{uid}.language` in Firestore.
+- **Inline password change** in the profile’s Security card, with current-password
+  reauthentication and client-side validation.
+- **Collapsible navigation** that closes the menu automatically after a section
+  is selected.
 - **Home workspace** that greets you, surfaces quick actions and lists every
   draft and published article.
 - **Editor.js canvas** with paragraph, heading and ordered/unordered list
@@ -83,7 +90,7 @@ console — merge them if the project uses other collections.
 
 ```text
 src/app/
-├── core/       Firebase setup, auth, guards, article cloud + sync services
+├── core/       Firebase setup, auth, i18n, guards, article cloud + sync services
 ├── models/     Typed domain models and article helpers
 ├── pages/      Routed screens: home, profile, editor, articles, auth
 ├── service/    Local-first article store
@@ -126,4 +133,11 @@ repository secret. The preview workflow requests `checks: write`,
 The project was originally scaffolded with Angular CLI 16.2.6 and has since been
 upgraded to Angular 22. Local drafts are stored under
 `bdg-editor23.articles.v1.<uid>`; published copies live in Firestore at
-`users/<uid>/articles/<id>`.
+`users/<uid>/articles/<id>`. The language preference is cached in
+`localStorage` under `bdg-editor23.language.v1` and mirrored to the user’s
+Firestore document; the account value wins when it can be loaded.
+
+The language layer is a small runtime dictionary in
+`src/app/core/i18n/`. Add a key to `translations/en.ts` first, then translate it
+in `de.ts` and `hu.ts` — both files are typed against the English keys, so the
+build fails until every language is complete.

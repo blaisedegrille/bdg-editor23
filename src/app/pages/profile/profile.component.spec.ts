@@ -3,6 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { AuthService } from 'src/app/core/auth.service';
+import { UserPreferencesService } from 'src/app/core/user-preferences.service';
 import { ArticleService } from 'src/app/service/article.service';
 import { articleStub } from 'src/app/testing/article.stub';
 import { authServiceStub } from 'src/app/testing/auth-service.stub';
@@ -14,9 +15,13 @@ describe('ProfileComponent', () => {
 
   beforeEach(() => {
     localStorage.clear();
+    localStorage.setItem('bdg-editor23.language.v1', 'en');
     TestBed.configureTestingModule({
       imports: [RouterTestingModule, NoopAnimationsModule, ProfileComponent],
-      providers: [{ provide: AuthService, useValue: { ...authServiceStub } }],
+      providers: [
+        { provide: AuthService, useValue: { ...authServiceStub } },
+        { provide: UserPreferencesService, useValue: {} },
+      ],
     });
   });
 
@@ -78,6 +83,16 @@ describe('ProfileComponent', () => {
     expect(compiled.querySelector('.profile__stats')?.textContent).toContain(
       'Published'
     );
+  });
+
+  it('shows the language and security settings', () => {
+    fixture = create();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-language-card')).not.toBeNull();
+    expect(compiled.querySelector('app-password-card')).not.toBeNull();
+    expect(compiled.textContent).toContain('Language');
+    expect(compiled.textContent).toContain('Security');
   });
 
   it('shows the signed out state without a user', () => {

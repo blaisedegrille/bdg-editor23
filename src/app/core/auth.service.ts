@@ -1,48 +1,63 @@
-import { Injectable, NgZone, inject } from '@angular/core';
+import { Injectable, NgZone, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { FirebaseError } from 'firebase/app';
 import {
+  EmailAuthProvider,
   User as FirebaseUser,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  reauthenticateWithCredential,
   sendEmailVerification,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
+  updatePassword,
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 
 import { User } from '../models/user';
+import { I18nService } from './i18n/i18n.service';
+import { TranslationKey } from './i18n/translations/en';
 import { userDisplayName } from './user-display';
 import { auth, db } from './firebase';
 
-/** Human friendly messages for the Firebase auth error codes we expect to hit. */
-const AUTH_ERROR_MESSAGES: Record<string, string> = {
-  'auth/email-already-in-use':
-    'An account already exists for this email address. Try signing in instead.',
-  'auth/invalid-credential': 'Incorrect email or password.',
-  'auth/invalid-email': 'Enter a valid email address.',
-  'auth/missing-email': 'Enter your email address.',
-  'auth/missing-password': 'Enter your password.',
-  'auth/network-request-failed':
-    'Network error. Check your connection and try again.',
-  'auth/too-many-requests':
-    'Too many attempts. Please wait a few minutes and try again.',
-  'auth/user-disabled': 'This account has been disabled.',
-  'auth/user-not-found': 'Incorrect email or password.',
-  'auth/weak-password': 'Choose a stronger password (at least 6 characters).',
-  'auth/wrong-password': 'Incorrect email or password.',
+/** Human friendly translations for the Firebase auth error codes we expect. */
+const AUTH_ERROR_KEYS: Record<string, TranslationKey> = {
+  'auth/email-already-in-use': 'auth.error.accountExists',
+  'auth/invalid-credential': 'auth.error.invalidCredential',
+  'auth/invalid-email': 'auth.error.invalidEmail',
+  'auth/missing-email': 'auth.error.missingEmail',
+  'auth/missing-password': 'auth.error.missingPassword',
+  'auth/network-request-failed': 'auth.error.network',
+  'auth/too-many-requests': 'auth.error.tooMany',
+  'auth/user-disabled': 'auth.error.disabled',
+  'auth/user-not-found': 'auth.error.notFound',
+  'auth/weak-password': 'auth.error.weakPassword',
+  'auth/wrong-password': 'auth.error.wrongPassword',
 };
 
-/** Converts any thrown value into an `Error` with a user presentable message. */
-function toAuthError(error: unknown): Error {
+/** Password changes report a wrong current password differently than sign-in. */
+const PASSWORD_ERROR_KEYS: Record<string, TranslationKey> = {
+  ...AUTH_ERROR_KEYS,
+  'auth/invalid-credential': 'auth.error.wrongPassword',
+  'auth/wrong-password': 'auth.error.wrongPassword',
+  'auth/requires-recent-login': 'auth.error.recentLogin',
+};
+
+/** Converts any thrown value into an `Error` with a translated message. */
+function toAuthError(
+  error: unknown,
+  i18n: I18nService,
+  overrides: Record<string, TranslationKey> = AUTH_ERROR_KEYS
+): Error {
   if (error instanceof FirebaseError) {
-    return new Error(AUTH_ERROR_MESSAGES[error.code] ?? error.message);
+    const key = overrides[error.code];
+    return new Error(key ? i18n.t(key) : error.message);
   }
   if (error instanceof Error) {
     return error;
   }
-  return new Error('Something went wrong. Please try again.');
+  return new Error(i18n.t('auth.error.generic'));
 }
 
 @Injectable({
@@ -51,9 +66,15 @@ function toAuthError(error: unknown): Error {
 export class AuthService {
   private readonly router = inject(Router);
   private readonly ngZone = inject(NgZone);
+  private readonly i18n = inject(I18nService);
 
   /** Currently signed in user, mirrored into `localStorage`. */
-  userData: FirebaseUser | null = null;
+  readonly authState = signal<FirebaseUser | null>(null);
+
+  /** Compatibility accessor for templates and components. */
+  get userData(): FirebaseUser | null {
+    return this.authState();
+  }
 
   constructor() {
     /* Saving user data in localstorage when
@@ -61,7 +82,7 @@ export class AuthService {
     onAuthStateChanged(auth, (user) => {
       // Firebase callbacks run outside of Angular's zone.
       this.ngZone.run(() => {
-        this.userData = user;
+        this.authState.set(user);
         localStorage.setItem('user', JSON.stringify(user));
       });
     });
@@ -77,7 +98,7 @@ export class AuthService {
       await this.SetUserData(result.user);
       await this.router.navigate(['home']);
     } catch (error) {
-      throw toAuthError(error);
+      throw toAuthError(error, this.i18n);
     }
   }
 
@@ -92,7 +113,7 @@ export class AuthService {
       await this.SetUserData(result.user);
       await this.SendVerificationMail();
     } catch (error) {
-      throw toAuthError(error);
+      throw toAuthError(error, this.i18n);
     }
   }
 
@@ -106,7 +127,7 @@ export class AuthService {
       await sendEmailVerification(user);
       await this.router.navigate(['verify-email-address']);
     } catch (error) {
-      throw toAuthError(error);
+      throw toAuthError(error, this.i18n);
     }
   }
 
@@ -115,7 +136,7 @@ export class AuthService {
     try {
       await sendPasswordResetEmail(auth, passwordResetEmail);
     } catch (error) {
-      throw toAuthError(error);
+      throw toAuthError(error, this.i18n);
     }
   }
 
@@ -151,6 +172,31 @@ export class AuthService {
   /** Email address, falling back to the cached user on reload. */
   get userEmail(): string {
     return this.userData?.email ?? this.cachedUser?.email ?? '';
+  }
+
+  /**
+   * Changes the password of an email/password account. Firebase requires a
+   * recent sign-in, so the current password is used to reauthenticate first.
+   */
+  async ChangePassword(
+    currentPassword: string,
+    newPassword: string
+  ): Promise<void> {
+    const user = auth.currentUser;
+    if (!user?.email) {
+      throw new Error(this.i18n.t('auth.error.notSignedIn'));
+    }
+
+    try {
+      const credential = EmailAuthProvider.credential(
+        user.email,
+        currentPassword
+      );
+      await reauthenticateWithCredential(user, credential);
+      await updatePassword(user, newPassword);
+    } catch (error) {
+      throw toAuthError(error, this.i18n, PASSWORD_ERROR_KEYS);
+    }
   }
 
   /* Setting up user data when sign in with username/password,

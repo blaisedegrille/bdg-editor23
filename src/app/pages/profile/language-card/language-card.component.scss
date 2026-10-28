@@ -1,0 +1,28 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.language-card {
+  display: flex;
+  height: 100%;
+  box-sizing: border-box;
+  flex-direction: column;
+}
+
+.language-card__icon {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background-color: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
+}
+
+.language-card mat-card-content {
+  flex: 1;
+  padding-top: 1rem;
+}
+
+.language-card__field {
+  width: 100%;
+}

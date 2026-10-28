@@ -10,46 +10,55 @@
       </div>
 
       <div class="profile__identity">
-        <p class="profile__eyebrow">Your profile</p>
+        <p class="profile__eyebrow">{{ 'profile.eyebrow' | t }}</p>
         <h1 class="profile__title">{{ userName }}</h1>
         <p class="profile__email">
           <mat-icon aria-hidden="true">mail_outline</mat-icon>
-          <span>{{ userEmail || 'Signed in' }}</span>
+          <span>{{ userEmail || ('profile.signedIn' | t) }}</span>
         </p>
       </div>
 
       @if (user) {
         <mat-chip-set
           class="profile__status"
-          aria-label="Email verification status"
+          [attr.aria-label]="'profile.verification.aria' | t"
         >
           @if (user.emailVerified) {
             <mat-chip highlighted>
               <mat-icon matChipAvatar>verified</mat-icon>
-              Email verified
+              {{ 'profile.verified' | t }}
             </mat-chip>
           } @else {
             <mat-chip highlighted class="profile__chip--warning">
               <mat-icon matChipAvatar>pending</mat-icon>
-              Email not verified
+              {{ 'profile.unverified' | t }}
             </mat-chip>
           }
         </mat-chip-set>
       }
     </section>
 
-    <section class="profile__stats" aria-label="Article statistics">
+    <section
+      class="profile__stats"
+      [attr.aria-label]="'profile.stats.aria' | t"
+    >
       <div class="profile__stat">
         <span class="profile__stat-value">{{ articleCount }}</span>
-        <span class="profile__stat-label">Articles</span>
+        <span class="profile__stat-label">{{
+          'profile.stats.articles' | t
+        }}</span>
       </div>
       <div class="profile__stat">
         <span class="profile__stat-value">{{ draftCount }}</span>
-        <span class="profile__stat-label">Drafts</span>
+        <span class="profile__stat-label">{{
+          'profile.stats.drafts' | t
+        }}</span>
       </div>
       <div class="profile__stat">
         <span class="profile__stat-value">{{ publishedCount }}</span>
-        <span class="profile__stat-label">Published</span>
+        <span class="profile__stat-label">{{
+          'profile.stats.published' | t
+        }}</span>
       </div>
     </section>
 
@@ -59,26 +68,28 @@
           <div mat-card-avatar class="profile__card-icon">
             <mat-icon>badge</mat-icon>
           </div>
-          <mat-card-title>Account</mat-card-title>
-          <mat-card-subtitle>Who you are signed in as</mat-card-subtitle>
+          <mat-card-title>{{ 'profile.account.title' | t }}</mat-card-title>
+          <mat-card-subtitle>{{
+            'profile.account.subtitle' | t
+          }}</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
           <dl class="profile__facts">
             <div class="profile__fact">
-              <dt>Name</dt>
+              <dt>{{ 'profile.account.name' | t }}</dt>
               <dd>{{ user?.displayName || userName }}</dd>
             </div>
             <div class="profile__fact">
-              <dt>Email</dt>
+              <dt>{{ 'profile.account.email' | t }}</dt>
               <dd>{{ userEmail || '—' }}</dd>
             </div>
             <div class="profile__fact">
-              <dt>Sign-in provider</dt>
+              <dt>{{ 'profile.account.provider' | t }}</dt>
               <dd>{{ providerLabel }}</dd>
             </div>
             <div class="profile__fact">
-              <dt>User ID</dt>
+              <dt>{{ 'profile.account.userId' | t }}</dt>
               <dd class="profile__mono" [title]="userId ?? ''">
                 {{ userId ?? '—' }}
               </dd>
@@ -87,42 +98,51 @@
         </mat-card-content>
       </mat-card>
 
+      <app-language-card />
+
       <mat-card appearance="outlined" class="profile__card">
         <mat-card-header>
           <div mat-card-avatar class="profile__card-icon">
             <mat-icon>history</mat-icon>
           </div>
-          <mat-card-title>Activity</mat-card-title>
-          <mat-card-subtitle>Recent account activity</mat-card-subtitle>
+          <mat-card-title>{{ 'profile.activity.title' | t }}</mat-card-title>
+          <mat-card-subtitle>{{
+            'profile.activity.subtitle' | t
+          }}</mat-card-subtitle>
         </mat-card-header>
 
         <mat-card-content>
           <dl class="profile__facts">
             <div class="profile__fact">
-              <dt>Member since</dt>
+              <dt>{{ 'profile.activity.memberSince' | t }}</dt>
               <dd>
                 @if (user?.metadata?.creationTime; as creationTime) {
-                  {{ creationTime | date: 'mediumDate' }}
+                  {{ creationTime | date: 'mediumDate' : '' : i18n.locale() }}
                 } @else {
                   —
                 }
               </dd>
             </div>
             <div class="profile__fact">
-              <dt>Last sign-in</dt>
+              <dt>{{ 'profile.activity.lastSignIn' | t }}</dt>
               <dd>
                 @if (user?.metadata?.lastSignInTime; as lastSignIn) {
-                  {{ lastSignIn | date: 'medium' }}
+                  {{ lastSignIn | date: 'medium' : '' : i18n.locale() }}
                 } @else {
                   —
                 }
               </dd>
             </div>
             <div class="profile__fact">
-              <dt>Email status</dt>
+              <dt>{{ 'profile.activity.emailStatus' | t }}</dt>
               <dd>
                 @if (user) {
-                  {{ user.emailVerified ? 'Verified' : 'Pending' }}
+                  {{
+                    (user.emailVerified
+                      ? 'profile.activity.verified'
+                      : 'profile.activity.pending'
+                    ) | t
+                  }}
                 } @else {
                   —
                 }
@@ -133,22 +153,26 @@
       </mat-card>
     </div>
 
+    <app-password-card />
+
     <div class="profile__actions">
       <a mat-stroked-button routerLink="/articles">
         <mat-icon>article</mat-icon>
-        Your articles
+        {{ 'profile.actions.articles' | t }}
       </a>
       <a mat-button routerLink="/home">
         <mat-icon>home</mat-icon>
-        Back home
+        {{ 'profile.actions.home' | t }}
       </a>
     </div>
   } @else {
     <section class="profile__empty">
       <mat-icon aria-hidden="true">lock_person</mat-icon>
-      <h1>You are not signed in</h1>
-      <p>Sign in to see your profile and workspace.</p>
-      <a mat-flat-button routerLink="/sign-in">Go to sign in</a>
+      <h1>{{ 'profile.signedOut.title' | t }}</h1>
+      <p>{{ 'profile.signedOut.body' | t }}</p>
+      <a mat-flat-button routerLink="/sign-in">
+        {{ 'profile.signedOut.action' | t }}
+      </a>
     </section>
   }
 </div>

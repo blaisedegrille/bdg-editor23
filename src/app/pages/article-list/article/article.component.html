@@ -3,9 +3,7 @@
     <mat-card-title class="article-card__title">
       {{ article().title }}
     </mat-card-title>
-    <mat-card-subtitle>
-      Updated {{ article().updatedAt | date: 'mediumDate' }}
-    </mat-card-subtitle>
+    <mat-card-subtitle>{{ updatedLabel }}</mat-card-subtitle>
   </mat-card-header>
 
   <mat-card-content>
@@ -13,7 +11,7 @@
       <p class="article-card__excerpt">{{ excerpt() }}</p>
     } @else {
       <p class="article-card__excerpt article-card__excerpt--empty">
-        This article is still empty.
+        {{ 'article.empty' | t }}
       </p>
     }
   </mat-card-content>
@@ -26,7 +24,9 @@
       <mat-icon aria-hidden="true">
         {{ published() ? 'cloud_done' : 'edit_note' }}
       </mat-icon>
-      {{ published() ? 'Published' : 'Draft' }}
+      {{
+        (published() ? 'article.published' : 'article.draft') | t
+      }}
     </span>
 
     <span class="article-card__spacer"></span>
@@ -35,13 +35,17 @@
       <button
         mat-icon-button
         type="button"
-        aria-label="Delete article"
+        [attr.aria-label]="'article.deleteAria' | t"
         (click)="remove.emit(article())"
       >
         <mat-icon>delete_outline</mat-icon>
       </button>
     }
-    <a mat-button [routerLink]="['/articles', article().id]">Read</a>
-    <a mat-button [routerLink]="['/editor', article().id]">Edit</a>
+    <a mat-button [routerLink]="['/articles', article().id]">
+      {{ 'article.read' | t }}
+    </a>
+    <a mat-button [routerLink]="['/editor', article().id]">
+      {{ 'article.edit' | t }}
+    </a>
   </mat-card-actions>
 </mat-card>

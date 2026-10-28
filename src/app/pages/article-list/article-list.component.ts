@@ -14,8 +14,10 @@ import { RouterLink } from '@angular/router';
 import { ArticleCloudService } from 'src/app/core/article-cloud.service';
 import { ArticleSyncService } from 'src/app/core/article-sync.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { Article } from 'src/app/models/article';
 import { ArticleService } from 'src/app/service/article.service';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 import { ArticleComponent } from './article/article.component';
 
 @Component({
@@ -30,6 +32,7 @@ import { ArticleComponent } from './article/article.component';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     ArticleComponent,
+    TranslatePipe,
   ],
 })
 export class ArticleListComponent implements OnInit {
@@ -37,6 +40,7 @@ export class ArticleListComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly syncService = inject(ArticleSyncService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly i18n = inject(I18nService);
 
   readonly articleService = inject(ArticleService);
   readonly syncing = signal(false);
@@ -53,9 +57,13 @@ export class ArticleListComponent implements OnInit {
   remove(article: Article): void {
     this.articleService.remove(article.id);
 
-    const ref = this.snackBar.open('Article deleted.', 'Undo', {
-      duration: 6000,
-    });
+    const ref = this.snackBar.open(
+      this.i18n.t('articles.deleted'),
+      this.i18n.t('common.undo'),
+      {
+        duration: 6000,
+      }
+    );
     ref.onAction().subscribe(() => this.articleService.restore(article));
 
     const uid = this.authService.userId;

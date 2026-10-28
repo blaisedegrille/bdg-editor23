@@ -9,7 +9,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
 
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { AuthCardComponent } from 'src/app/shared/auth-card/auth-card.component';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 @Component({
   selector: 'app-sign-in',
@@ -26,12 +28,15 @@ import { AuthCardComponent } from 'src/app/shared/auth-card/auth-card.component'
     MatInputModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
+    TranslatePipe,
   ],
 })
 export class SignInComponent {
   private readonly authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
   private readonly formBuilder = inject(FormBuilder);
+
+  readonly i18n = inject(I18nService);
 
   readonly signInForm = this.formBuilder.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -70,9 +75,11 @@ export class SignInComponent {
       const message =
         error instanceof Error
           ? error.message
-          : 'Unable to sign in. Please try again.';
+          : this.i18n.t('auth.error.signIn');
       this.errorMessage.set(message);
-      this.snackBar.open(message, 'Dismiss', { duration: 6000 });
+      this.snackBar.open(message, this.i18n.t('common.dismiss'), {
+        duration: 6000,
+      });
     } finally {
       this.submitting.set(false);
     }
