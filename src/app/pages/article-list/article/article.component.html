@@ -1,17 +1,45 @@
-<mat-card class="my-card">
+<mat-card appearance="outlined" class="article-card">
   <mat-card-header>
-    <mat-card-title>Érzéstelenítés</mat-card-title>
-    <mat-card-subtitle
-      >Általános érzéstelenítés (altatás, narkózis)</mat-card-subtitle
-    >
+    <mat-card-title class="article-card__title">
+      {{ article().title }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      Updated {{ article().updatedAt | date: 'mediumDate' }}
+    </mat-card-subtitle>
   </mat-card-header>
+
   <mat-card-content>
-    <p>Inhalációs anesztézia</p>
-    <p>Intravénás anesztézia (totális intravénás anesztézia, TIVA)</p>
-    <p>Kombinált anesztézia</p>
+    @if (excerpt()) {
+      <p class="article-card__excerpt">{{ excerpt() }}</p>
+    } @else {
+      <p class="article-card__excerpt article-card__excerpt--empty">
+        This article is still empty.
+      </p>
+    }
   </mat-card-content>
-  <mat-card-actions>
-    <button mat-button>Edit</button>
-    <button mat-button>Read</button>
+
+  <mat-card-actions class="article-card__actions">
+    <span
+      class="article-card__status"
+      [class.article-card__status--published]="published()"
+    >
+      <mat-icon aria-hidden="true">
+        {{ published() ? 'cloud_done' : 'edit_note' }}
+      </mat-icon>
+      {{ published() ? 'Published' : 'Draft' }}
+    </span>
+
+    <span class="article-card__spacer"></span>
+
+    <button
+      mat-icon-button
+      type="button"
+      aria-label="Delete article"
+      (click)="remove.emit(article())"
+    >
+      <mat-icon>delete_outline</mat-icon>
+    </button>
+    <a mat-button [routerLink]="['/articles', article().id]">Read</a>
+    <a mat-button [routerLink]="['/editor', article().id]">Edit</a>
   </mat-card-actions>
 </mat-card>

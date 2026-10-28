@@ -1,36 +1,50 @@
-<div class="displayTable">
-  <div class="displayTableCell">
-    <div class="authBlock">
-      <h3>Thank You for Registering</h3>
-      <div class="formGroup" *ngIf="authService.userData as user">
-        <p class="text-center">
-          We have sent a confirmation email to <strong>{{ user.email }}</strong
-          >.
-        </p>
-        <p class="text-center">
-          Please check your email and click on the link to verfiy your email
-          address.
-        </p>
-      </div>
+<app-auth-card
+  title="Check your inbox"
+  subtitle="We've sent a verification link to confirm your email address."
+  icon="mark_email_read"
+>
+  @if (authService.userData; as user) {
+    <p class="verify-email__address">
+      <mat-icon aria-hidden="true">mail_outline</mat-icon>
+      <span>{{ user.email }}</span>
+    </p>
+  }
 
-      <!-- Calling SendVerificationMail() method using authService Api -->
-      <div class="formGroup">
-        <button
-          type="button"
-          class="btn btnPrimary"
-          (click)="authService.SendVerificationMail()"
-        >
-          <i class="fas fa-redo-alt"></i>
-          Resend Verification Email
-        </button>
-      </div>
+  <p class="verify-email__text">
+    Click the link in the email to activate your account. If you don't see it,
+    check your spam folder or resend it below.
+  </p>
+
+  @if (errorMessage(); as message) {
+    <div class="auth-alert" role="alert">
+      <mat-icon aria-hidden="true">error_outline</mat-icon>
+      <span>{{ message }}</span>
     </div>
-    <div class="redirectToLogin">
-      <span
-        >Go back to?<span class="redirect" routerLink="/sign-in">
-          Sign in</span
-        ></span
-      >
-    </div>
+  }
+
+  <button
+    mat-stroked-button
+    class="verify-email__resend"
+    type="button"
+    [disabled]="resending()"
+    (click)="resendVerificationEmail()"
+  >
+    <mat-icon aria-hidden="true">forward_to_inbox</mat-icon>
+    @if (resending()) {
+      <mat-progress-spinner
+        class="verify-email__spinner"
+        diameter="18"
+        mode="indeterminate"
+        aria-label="Resending verification email"
+      />
+      <span>Sending…</span>
+    } @else {
+      <span>Resend verification email</span>
+    }
+  </button>
+
+  <div authFooter class="auth-footer">
+    <span>Already verified?</span>
+    <a mat-button routerLink="/sign-in">Back to sign in</a>
   </div>
-</div>
+</app-auth-card>

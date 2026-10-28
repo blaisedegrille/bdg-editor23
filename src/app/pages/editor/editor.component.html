@@ -1,8 +1,92 @@
-<div class="container">
-  <h1>Editor</h1>
-  <div id="editorjs"></div>
-  <br />
-  <button mat-raised-button (click)="onSave()" color="accent">Save</button>
-  <button mat-raised-button (click)="onClear()" color="primary">Clear</button>
-  <button mat-raised-button (click)="onRefresh()">Refresh</button>
+<div class="editor-page">
+  <header class="editor-page__toolbar">
+    <a
+      mat-icon-button
+      routerLink="/articles"
+      aria-label="Back to articles"
+      class="editor-page__back"
+    >
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+
+    <mat-form-field appearance="outline" class="editor-page__title">
+      <mat-label>Article title</mat-label>
+      <input
+        matInput
+        [value]="title()"
+        (input)="onTitleInput($event)"
+        placeholder="Untitled article"
+        aria-label="Article title"
+      />
+    </mat-form-field>
+
+    @if (currentArticle()?.publishedAt) {
+      <span class="editor-page__status editor-page__status--published">
+        <mat-icon aria-hidden="true">cloud_done</mat-icon>
+        Published
+      </span>
+    } @else {
+      <span class="editor-page__status">
+        <mat-icon aria-hidden="true">edit_note</mat-icon>
+        Draft
+      </span>
+    }
+
+    @if (dirty()) {
+      <span class="editor-page__dirty">Unsaved changes</span>
+    }
+
+    <span class="editor-page__spacer"></span>
+
+    @if (currentArticle(); as article) {
+      <button
+        mat-icon-button
+        type="button"
+        aria-label="Delete article"
+        (click)="deleteArticle()"
+      >
+        <mat-icon>delete_outline</mat-icon>
+      </button>
+    }
+
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="saving() || publishing()"
+      (click)="saveDraft()"
+    >
+      <mat-icon>save</mat-icon>
+      {{ saving() ? 'Saving…' : 'Save draft' }}
+    </button>
+
+    <button
+      mat-flat-button
+      type="button"
+      [disabled]="saving() || publishing()"
+      (click)="publish()"
+    >
+      <mat-icon>cloud_upload</mat-icon>
+      {{ publishing() ? 'Publishing…' : 'Publish' }}
+    </button>
+  </header>
+
+  @if (notFound()) {
+    <div class="editor-page__empty" role="status">
+      <mat-icon aria-hidden="true">search_off</mat-icon>
+      <h2>Article not found</h2>
+      <p>
+        It may have been deleted on this device. Published copies are loaded
+        when you are online.
+      </p>
+      <a mat-flat-button routerLink="/articles">Back to articles</a>
+    </div>
+  }
+
+  <mat-card
+    appearance="outlined"
+    class="editor-page__canvas"
+    [class.editor-page__canvas--hidden]="notFound()"
+  >
+    <div #editorHolder class="editor-page__holder"></div>
+  </mat-card>
 </div>
