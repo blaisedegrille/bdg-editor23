@@ -21,13 +21,15 @@
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side">
     <mat-nav-list #components>
-      <mat-list-item
-        *ngFor="let component of componentList"
-        [routerLink]="component.route"
-        ><span>{{ component.name }}</span>
+      @for (component of componentList; track component) {
+        <mat-list-item [routerLink]="component.route">
+          <span>{{ component.name }}</span>
 
-        <mat-icon class="pt-2" *ngIf="component.locked">lock</mat-icon>
-      </mat-list-item>
+          @if (component.locked) {
+            <mat-icon class="pt-2">lock</mat-icon>
+          }
+        </mat-list-item>
+      }
     </mat-nav-list>
   </mat-drawer>
 
