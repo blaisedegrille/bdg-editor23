@@ -1,44 +1,22 @@
 import { TestBed } from '@angular/core/testing';
-
-import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { of } from 'rxjs';
 
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
   let service: AuthService;
-  let router: { navigate: jasmine.Spy };
-
-  const angularFireAuthMock = {
-    authState: of(null),
-    currentUser: Promise.resolve(null),
-    signInWithEmailAndPassword: () => Promise.resolve({ user: null }),
-    createUserWithEmailAndPassword: () => Promise.resolve({ user: null }),
-    sendPasswordResetEmail: () => Promise.resolve(),
-    signOut: () => Promise.resolve(),
-  };
-
-  const angularFirestoreMock = {
-    doc: () => ({ set: () => Promise.resolve() }),
-  };
 
   beforeEach(() => {
-    router = { navigate: jasmine.createSpy('navigate') };
-
+    localStorage.clear();
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
       providers: [
-        AuthService,
-        { provide: AngularFireAuth, useValue: angularFireAuthMock },
-        { provide: AngularFirestore, useValue: angularFirestoreMock },
-        { provide: Router, useValue: router },
+        { provide: Router, useValue: { navigate: jasmine.createSpy('navigate') } },
       ],
     });
     service = TestBed.inject(AuthService);
   });
+
+  afterEach(() => localStorage.clear());
 
   it('should be created', () => {
     expect(service).toBeTruthy();
