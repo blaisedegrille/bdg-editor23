@@ -1,29 +1,63 @@
 <nav class="app-navbar">
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" class="app-toolbar">
     <button
       mat-icon-button
-      class="example-icon"
-      aria-label="Example icon-button with menu icon"
+      class="app-toolbar__menu"
+      aria-label="Toggle navigation menu"
       (click)="drawer.toggle()"
     >
       <mat-icon>menu</mat-icon>
     </button>
 
-    <div class="app-logo-title">
-      <!--       <img src="../../../../assets/logo.png" alt="" style="max-height: 40px" />
- -->
-      <span>{{ title }}</span>
-    </div>
+    <a class="app-brand" routerLink="/home" aria-label="Go to the home page">
+      <span class="app-brand__badge">
+        <mat-icon>auto_stories</mat-icon>
+      </span>
+      <span class="app-brand__title">{{ title }}</span>
+    </a>
+
     <span class="example-spacer"></span>
-    <ang23-mode-toggle></ang23-mode-toggle>
+
+    @if (authService.userData; as user) {
+      <div class="app-user" [title]="user.email ?? ''">
+        <span class="app-user__avatar" aria-hidden="true">
+          @if (user.photoURL) {
+            <img [src]="user.photoURL" alt="" />
+          } @else {
+            {{ userInitials }}
+          }
+        </span>
+        <span class="app-user__name">{{ userName }}</span>
+      </div>
+
+      <button
+        mat-icon-button
+        class="app-toolbar__logout"
+        aria-label="Sign out"
+        matTooltip="Sign out"
+        (click)="signOut()"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
+
+      <span class="app-toolbar__divider" aria-hidden="true"></span>
+    }
+
+    <ang23-mode-toggle />
   </mat-toolbar>
 </nav>
+
 <mat-drawer-container class="example-container" autosize>
   <mat-drawer #drawer class="example-sidenav" mode="side">
+    <p class="example-sidenav__label">Workspace</p>
     <mat-nav-list #components>
-      @for (component of componentList; track component) {
-        <mat-list-item [routerLink]="component.route">
-          <span>{{ component.name }}</span>
+      @for (component of componentList; track component.route) {
+        <mat-list-item
+          [routerLink]="component.route"
+          routerLinkActive="active-link"
+        >
+          <mat-icon matListItemIcon>{{ component.icon }}</mat-icon>
+          <span matListItemTitle>{{ component.name }}</span>
 
           @if (component.locked) {
             <mat-icon class="pt-2">lock</mat-icon>

@@ -1,31 +1,134 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .app-navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+  position: sticky;
+  inset: 0 0 auto;
   z-index: 2;
-  margin-bottom: 50px;
+  flex: 0 0 auto;
   // Material 3 elevation token (equivalent of the old `mat-elevation-z6`).
   box-shadow: var(--mat-sys-level3);
 }
 
-.app-logo-title {
-  cursor: pointer;
-  margin: auto;
-  display: contents;
+.app-toolbar {
+  gap: 0.25rem;
+}
+
+.app-brand {
+  display: inline-flex;
+  gap: 0.625rem;
+  align-items: center;
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.app-brand__badge {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: var(--mat-sys-corner-small);
+  background-color: color-mix(in srgb, currentColor 18%, transparent);
+}
+
+.app-brand__title {
+  overflow: hidden;
+  font: var(--mat-sys-title-medium);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-user {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: center;
+  min-width: 0;
+  max-width: 14rem;
+  padding: 0.25rem 0.625rem 0.25rem 0.25rem;
+  border-radius: var(--mat-sys-corner-full);
+  background-color: color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.app-user__avatar {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: var(--mat-sys-primary-container);
+  color: var(--mat-sys-on-primary-container);
+  font: var(--mat-sys-label-large);
+  font-weight: 700;
+}
+
+.app-user__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.app-user__name {
+  overflow: hidden;
+  font: var(--mat-sys-label-large);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.app-toolbar__divider {
+  width: 1px;
+  height: 1.75rem;
+  margin: 0 0.25rem;
+  background-color: color-mix(in srgb, currentColor 30%, transparent);
+}
+
+@media (max-width: 540px) {
+  .app-brand__title,
+  .app-user__name,
+  .app-toolbar__divider {
+    display: none;
+  }
+
+  .app-user {
+    padding: 0;
+    background-color: transparent;
+  }
 }
 
 // teljes app
 .example-container {
-  height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.5);
-  padding-top: 55px;
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-height: 0;
   display: block;
-  //   overflow-y: hidden;
+  border: 0;
 }
 
 .mat-list-item {
   padding: 0;
+  border-radius: var(--mat-sys-corner-full);
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.mat-list-item:hover {
+  background-color: var(--mat-sys-surface-container-high);
+}
+
+.mat-list-item.active-link {
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+}
+
+.mat-list-item.active-link mat-icon {
+  color: var(--mat-sys-on-secondary-container);
 }
 
 ::ng-deep .mat-drawer-container {
@@ -34,54 +137,31 @@
 
 .example-sidenav-content {
   width: 100%;
-  height: fit-content;
-  //  background: linear-gradient(to bottom, #ffffff 0%, #9c27b0 100%);
+  min-height: 100%;
 }
 
 .example-sidenav {
-  padding-top: 56px;
+  width: 15rem;
+  padding-top: 0;
+  border-right: 1px solid var(--mat-sys-outline-variant);
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.example-sidenav__label {
+  margin: 1.25rem 1.25rem 0.25rem;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-small);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.example-sidenav mat-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.25rem 0.5rem 1rem;
 }
 
 .example-spacer {
   flex: 1 1 auto;
-}
-
-//buttons
-
-section {
-  display: table;
-}
-
-.example-label {
-  display: table-cell;
-  font-size: 14px;
-  margin-left: 8px;
-  min-width: 120px;
-}
-
-.example-button-row {
-  display: table-cell;
-
-  max-width: 600px;
-}
-
-.example-button-row .mat-mdc-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-.example-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.example-button-container {
-  display: flex;
-  justify-content: center;
-  width: 120px;
-}
-
-.github-logo {
-  margin-top: 6px;
-  margin-right: 6px;
 }
