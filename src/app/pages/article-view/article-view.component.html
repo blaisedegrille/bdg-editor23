@@ -1,13 +1,17 @@
 <div class="article-view">
   <div class="article-view__topbar">
-    <a mat-icon-button routerLink="/articles" aria-label="Back to articles">
+    <a
+      mat-icon-button
+      routerLink="/articles"
+      [attr.aria-label]="'reader.back' | t"
+    >
       <mat-icon>arrow_back</mat-icon>
     </a>
     <span class="article-view__spacer"></span>
     @if (article(); as current) {
       <a mat-stroked-button [routerLink]="['/editor', current.id]">
         <mat-icon>edit</mat-icon>
-        Edit article
+        {{ 'reader.edit' | t }}
       </a>
     }
   </div>
@@ -15,7 +19,7 @@
   @if (loading()) {
     <div class="article-view__loading">
       <mat-spinner diameter="32" />
-      <span>Loading article…</span>
+      <span>{{ 'reader.loading' | t }}</span>
     </div>
   } @else if (article(); as current) {
     <article class="article-view__article">
@@ -25,21 +29,21 @@
         <div class="article-view__meta">
           <span class="article-view__author">
             <mat-icon aria-hidden="true">person</mat-icon>
-            {{ current.authorName || 'Unknown author' }}
+            {{ current.authorName || ('reader.unknownAuthor' | t) }}
           </span>
           <span>
             <mat-icon aria-hidden="true">schedule</mat-icon>
-            Updated {{ current.updatedAt | date: 'mediumDate' }}
+            {{ updatedLabel }}
           </span>
           @if (current.publishedAt) {
             <span class="article-view__status">
               <mat-icon aria-hidden="true">cloud_done</mat-icon>
-              Published
+              {{ 'reader.published' | t }}
             </span>
           } @else {
             <span class="article-view__status">
               <mat-icon aria-hidden="true">edit_note</mat-icon>
-              Local draft
+              {{ 'reader.localDraft' | t }}
             </span>
           }
         </div>
@@ -52,12 +56,11 @@
   } @else {
     <div class="article-view__empty" role="status">
       <mat-icon aria-hidden="true">search_off</mat-icon>
-      <h1>Article not found</h1>
-      <p>
-        This article is not stored on this device. If it was published, it will
-        appear here once it can be loaded from Firebase.
-      </p>
-      <a mat-flat-button routerLink="/articles">Back to articles</a>
+      <h1>{{ 'reader.notFound.title' | t }}</h1>
+      <p>{{ 'reader.notFound.body' | t }}</p>
+      <a mat-flat-button routerLink="/articles">
+        {{ 'reader.notFound.back' | t }}
+      </a>
     </div>
   }
 </div>

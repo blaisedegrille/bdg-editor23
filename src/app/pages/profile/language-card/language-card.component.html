@@ -1,0 +1,38 @@
+<mat-card appearance="outlined" class="language-card">
+  <mat-card-header>
+    <div mat-card-avatar class="language-card__icon">
+      <mat-icon>translate</mat-icon>
+    </div>
+    <mat-card-title>{{ 'profile.language.title' | t }}</mat-card-title>
+    <mat-card-subtitle>{{
+      'profile.language.subtitle' | t
+    }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <mat-form-field appearance="outline" class="language-card__field">
+      <mat-label>{{ 'profile.language.label' | t }}</mat-label>
+      <mat-select
+        [value]="i18n.language()"
+        [attr.aria-label]="'profile.language.label' | t"
+        (selectionChange)="selectLanguage($event.value)"
+      >
+        <mat-select-trigger>
+          <span class="language-card__option">
+            <app-language-flag [code]="i18n.language()" />
+            <span>{{ selectedName }}</span>
+          </span>
+        </mat-select-trigger>
+
+        @for (language of languages; track language.code) {
+          <mat-option [value]="language.code">
+            <span class="language-card__option">
+              <app-language-flag [code]="language.code" />
+              <span>{{ language.name }}</span>
+            </span>
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+  </mat-card-content>
+</mat-card>

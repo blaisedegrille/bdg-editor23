@@ -1,4 +1,4 @@
-import { DatePipe } from '@angular/common';
+import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,9 +16,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { ArticleCloudService } from 'src/app/core/article-cloud.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { Article } from 'src/app/models/article';
 import { ArticleService } from 'src/app/service/article.service';
 import { ArticleContentComponent } from 'src/app/shared/article-content/article-content.component';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 @Component({
   selector: 'app-article-view',
@@ -26,13 +28,13 @@ import { ArticleContentComponent } from 'src/app/shared/article-content/article-
   styleUrls: ['./article-view.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
   imports: [
-    DatePipe,
     RouterLink,
     MatButtonModule,
     MatDividerModule,
     MatIconModule,
     MatProgressSpinnerModule,
     ArticleContentComponent,
+    TranslatePipe,
   ],
 })
 export class ArticleViewComponent implements OnInit {
@@ -42,8 +44,19 @@ export class ArticleViewComponent implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
+  readonly i18n = inject(I18nService);
   readonly article = signal<Article | null>(null);
   readonly loading = signal(true);
+
+  get updatedLabel(): string {
+    const updatedAt = this.article()?.updatedAt;
+    if (!updatedAt) {
+      return '';
+    }
+    return this.i18n.t('reader.updated', {
+      date: formatDate(updatedAt, 'mediumDate', this.i18n.locale()),
+    });
+  }
 
   ngOnInit(): void {
     this.route.paramMap

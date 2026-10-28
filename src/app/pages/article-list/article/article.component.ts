@@ -1,8 +1,9 @@
-import { DatePipe } from '@angular/common';
+import { formatDate } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
   output,
 } from '@angular/core';
@@ -11,7 +12,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { Article, articleExcerpt } from 'src/app/models/article';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 /** Presentational card for one article in the article list. */
 @Component({
@@ -19,9 +22,16 @@ import { Article, articleExcerpt } from 'src/app/models/article';
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss'],
   changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [DatePipe, RouterLink, MatButtonModule, MatCardModule, MatIconModule],
+  imports: [
+    RouterLink,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    TranslatePipe,
+  ],
 })
 export class ArticleComponent {
+  readonly i18n = inject(I18nService);
   readonly article = input.required<Article>();
   /** Hides the delete button on read-only feeds such as the home page. */
   readonly showDelete = input(true);
@@ -29,4 +39,14 @@ export class ArticleComponent {
 
   readonly excerpt = computed(() => articleExcerpt(this.article()));
   readonly published = computed(() => !!this.article().publishedAt);
+
+  get updatedLabel(): string {
+    return this.i18n.t('article.updated', {
+      date: formatDate(
+        this.article().updatedAt,
+        'mediumDate',
+        this.i18n.locale()
+      ),
+    });
+  }
 }

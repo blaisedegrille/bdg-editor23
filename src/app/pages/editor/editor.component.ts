@@ -18,14 +18,16 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import EditorJS, { EditorConfig } from '@editorjs/editorjs';
+import EditorJS, { EditorConfig, I18nDictionary } from '@editorjs/editorjs';
 import Header from '@editorjs/header';
 import List from '@editorjs/list';
 
 import { ArticleCloudService } from 'src/app/core/article-cloud.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { Article } from 'src/app/models/article';
 import { ArticleService } from 'src/app/service/article.service';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 export type EditorFactory = (config: EditorConfig) => EditorJS;
 
@@ -50,6 +52,7 @@ export const EDITOR_FACTORY = new InjectionToken<EditorFactory>(
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
+    TranslatePipe,
   ],
 })
 export class EditorComponent implements AfterViewInit, OnDestroy {
@@ -61,6 +64,8 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   private readonly route = inject(ActivatedRoute);
   private readonly editorFactory = inject(EDITOR_FACTORY);
   private readonly destroyRef = inject(DestroyRef);
+
+  readonly i18n = inject(I18nService);
   private readonly holderRef =
     viewChild.required<ElementRef<HTMLDivElement>>('editorHolder');
 
@@ -78,8 +83,11 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this.editor = this.editorFactory({
       holder: this.holderRef().nativeElement,
       autofocus: true,
-      placeholder: 'Start writing your story…',
+      placeholder: this.i18n.t('editor.placeholder'),
       inlineToolbar: true,
+      i18n: {
+        messages: this.editorMessages,
+      },
       tools: {
         header: Header,
         list: List,
@@ -107,13 +115,55 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this.dirty.set(true);
   }
 
+  /**
+   * Editor.js resolves its own UI strings from a nested dictionary. Every key
+   * below is the original English string, so translations must leave the keys
+   * untouched and only change the values.
+   */
+  private get editorMessages(): I18nDictionary {
+    return {
+      toolNames: {
+        Text: this.i18n.t('editorjs.tool.paragraph'),
+        Heading: this.i18n.t('editorjs.tool.header'),
+        List: this.i18n.t('editorjs.tool.list'),
+      },
+      tools: {
+        list: {
+          Unordered: this.i18n.t('editorjs.tool.unorderedList'),
+          Ordered: this.i18n.t('editorjs.tool.orderedList'),
+        },
+      },
+      blockTunes: {
+        delete: { Delete: this.i18n.t('editorjs.tune.delete') },
+        moveUp: { 'Move up': this.i18n.t('editorjs.tune.moveUp') },
+        moveDown: { 'Move down': this.i18n.t('editorjs.tune.moveDown') },
+      },
+      ui: {
+        toolbar: {
+          toolbox: { Add: this.i18n.t('editorjs.ui.toolboxAdd') },
+        },
+        inlineToolbar: {
+          converter: { 'Convert to': this.i18n.t('editorjs.ui.convertTo') },
+        },
+        popover: {
+          Filter: this.i18n.t('editorjs.ui.filter'),
+          'Nothing found': this.i18n.t('editorjs.ui.nothingFound'),
+        },
+      },
+    };
+  }
+
   /** Saves the current content as a local draft and returns it. */
   async saveDraft(): Promise<Article | null> {
     const title = this.title().trim();
     if (!title) {
-      this.snackBar.open('Add a title before saving.', 'Dismiss', {
-        duration: 4000,
-      });
+      this.snackBar.open(
+        this.i18n.t('editor.snack.titleRequired'),
+        this.i18n.t('common.dismiss'),
+        {
+          duration: 4000,
+        }
+      );
       return null;
     }
     if (!this.editor) {
@@ -145,13 +195,17 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
       this.currentArticle.set(article);
       this.dirty.set(false);
-      this.snackBar.open('Draft saved locally.', 'Dismiss', { duration: 2500 });
+      this.snackBar.open(
+        this.i18n.t('editor.snack.saved'),
+        this.i18n.t('common.dismiss'),
+        { duration: 2500 }
+      );
       return article;
     } catch (error) {
       console.error('Saving the article failed.', error);
       this.snackBar.open(
-        'Could not save this draft. Please try again.',
-        'Dismiss',
+        this.i18n.t('editor.snack.saveFailed'),
+        this.i18n.t('common.dismiss'),
         { duration: 5000 }
       );
       return null;
@@ -175,14 +229,18 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       if (updated) {
         this.currentArticle.set(updated);
       }
-      this.snackBar.open('Published to Firebase.', 'Dismiss', {
-        duration: 4000,
-      });
+      this.snackBar.open(
+        this.i18n.t('editor.snack.published'),
+        this.i18n.t('common.dismiss'),
+        {
+          duration: 4000,
+        }
+      );
     } catch (error) {
       console.error('Publishing the article failed.', error);
       this.snackBar.open(
-        'Publishing failed. Your draft is still saved locally.',
-        'Dismiss',
+        this.i18n.t('editor.snack.publishFailed'),
+        this.i18n.t('common.dismiss'),
         { duration: 6000 }
       );
     } finally {
@@ -199,9 +257,13 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     this.articleService.remove(article.id);
     await this.router.navigate(['/articles']);
 
-    const ref = this.snackBar.open('Article deleted.', 'Undo', {
-      duration: 6000,
-    });
+    const ref = this.snackBar.open(
+      this.i18n.t('editor.snack.deleted'),
+      this.i18n.t('common.undo'),
+      {
+        duration: 6000,
+      }
+    );
     ref.onAction().subscribe(() => this.articleService.restore(article));
 
     const uid = this.authService.userId;

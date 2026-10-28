@@ -12,9 +12,11 @@ import { RouterLink } from '@angular/router';
 
 import { ArticleSyncService } from 'src/app/core/article-sync.service';
 import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { userInitials as toInitials } from 'src/app/core/user-display';
 import { ArticleService } from 'src/app/service/article.service';
 import { ArticleComponent } from 'src/app/pages/article-list/article/article.component';
+import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 @Component({
   selector: 'app-home',
@@ -27,6 +29,7 @@ import { ArticleComponent } from 'src/app/pages/article-list/article/article.com
     MatIconModule,
     MatProgressSpinnerModule,
     ArticleComponent,
+    TranslatePipe,
   ],
 })
 export class HomeComponent implements OnInit {
@@ -34,6 +37,7 @@ export class HomeComponent implements OnInit {
   private readonly articleService = inject(ArticleService);
   private readonly syncService = inject(ArticleSyncService);
 
+  readonly i18n = inject(I18nService);
   readonly syncing = signal(false);
 
   get userName(): string {
@@ -51,12 +55,12 @@ export class HomeComponent implements OnInit {
   get greeting(): string {
     const hour = new Date().getHours();
     if (hour < 12) {
-      return 'Good morning';
+      return this.i18n.t('home.greeting.morning');
     }
     if (hour < 18) {
-      return 'Good afternoon';
+      return this.i18n.t('home.greeting.afternoon');
     }
-    return 'Good evening';
+    return this.i18n.t('home.greeting.evening');
   }
 
   get articles() {

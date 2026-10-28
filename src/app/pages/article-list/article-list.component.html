@@ -1,20 +1,20 @@
 <div class="articles-page">
   <header class="articles-page__header">
     <div>
-      <h1>Your articles</h1>
-      <p>Drafts are saved on this device; published copies also live in Firebase.</p>
+      <h1>{{ 'articles.title' | t }}</h1>
+      <p>{{ 'articles.subtitle' | t }}</p>
     </div>
 
     <div class="articles-page__actions">
       @if (syncing()) {
         <span class="articles-page__syncing">
           <mat-spinner diameter="16" />
-          Syncing…
+          {{ 'common.syncing' | t }}
         </span>
       }
       <a mat-flat-button routerLink="/editor">
         <mat-icon>add</mat-icon>
-        New article
+        {{ 'articles.new' | t }}
       </a>
     </div>
   </header>
@@ -28,11 +28,11 @@
   } @else {
     <div class="articles-page__empty">
       <mat-icon aria-hidden="true">article</mat-icon>
-      <h2>No articles yet</h2>
-      <p>Start with a title and a few blocks — saving is instant and local.</p>
+      <h2>{{ 'articles.empty.title' | t }}</h2>
+      <p>{{ 'articles.empty.body' | t }}</p>
       <a mat-flat-button routerLink="/editor">
         <mat-icon>edit_note</mat-icon>
-        Write your first article
+        {{ 'articles.empty.action' | t }}
       </a>
     </div>
   }

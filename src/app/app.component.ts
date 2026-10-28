@@ -13,9 +13,11 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/auth.service';
+import { UserPreferencesService } from './core/user-preferences.service';
 import { userInitials as toInitials } from './core/user-display';
 import { Menu } from './models/menu';
 import { ModeToggleComponent } from './shared/mode-toggle/mode-toggle.component';
+import { TranslatePipe } from './shared/translate.pipe';
 
 @Component({
   selector: 'app-root',
@@ -37,6 +39,7 @@ import { ModeToggleComponent } from './shared/mode-toggle/mode-toggle.component'
     RouterLink,
     RouterLinkActive,
     RouterOutlet,
+    TranslatePipe,
   ],
 })
 export class AppComponent {
@@ -44,12 +47,17 @@ export class AppComponent {
 
   title = 'bdg-editor23';
   componentList: Menu[] = [
-    { name: 'Home', route: 'home', icon: 'home' },
-    { name: 'Editor', route: 'editor', icon: 'edit_note' },
-    { name: 'Articles', route: 'articles', icon: 'article' },
+    { labelKey: 'app.nav.home', route: 'home', icon: 'home' },
+    { labelKey: 'app.nav.editor', route: 'editor', icon: 'edit_note' },
+    { labelKey: 'app.nav.articles', route: 'articles', icon: 'article' },
     /*     { name: 'User', route: 'user', locked: true },
     { name: 'Settings', route: 'settings', locked: true }, */
   ];
+
+  constructor() {
+    // Starts the account language sync even when the profile is never opened.
+    inject(UserPreferencesService);
+  }
 
   /** Best available label for the signed in user. */
   get userName(): string {

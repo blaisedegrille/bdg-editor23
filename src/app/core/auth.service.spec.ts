@@ -36,4 +36,9 @@ describe('AuthService', () => {
     expect(service.userLabel).toBe('jane');
     expect(service.userEmail).toBe('jane@example.com');
   });
+
+  it('exposes the live auth state through userData', () => {
+    expect(service.authState()).toBeNull();
+    expect(service.userData).toBeNull();
+  });
 });

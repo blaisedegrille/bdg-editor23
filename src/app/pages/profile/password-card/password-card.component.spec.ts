@@ -1,0 +1,216 @@
+import { WritableSignal, signal } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
+import { AuthService } from 'src/app/core/auth.service';
+import { I18nService } from 'src/app/core/i18n/i18n.service';
+import { authServiceStub } from 'src/app/testing/auth-service.stub';
+import { PasswordCardComponent } from './password-card.component';
+
+describe('PasswordCardComponent', () => {
+  let fixture: ComponentFixture<PasswordCardComponent>;
+  let component: PasswordCardComponent;
+  let changePassword: jasmine.Spy<AuthService['ChangePassword']>;
+  let authState: WritableSignal<Record<string, unknown>>;
+  let authValue: Record<string, unknown>;
+
+  beforeEach(() => {
+    localStorage.clear();
+    changePassword = jasmine
+      .createSpy('ChangePassword')
+      .and.resolveTo();
+    authState = signal({
+      ...(authServiceStub.authState() as Record<string, unknown>),
+    });
+    authValue = {
+      ...authServiceStub,
+      authState,
+      get userData() {
+        return authState();
+      },
+      ChangePassword: changePassword,
+    };
+
+    TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule, PasswordCardComponent],
+      providers: [{ provide: AuthService, useValue: authValue }],
+    });
+    TestBed.inject(I18nService).setLanguage('en');
+
+    fixture = TestBed.createComponent(PasswordCardComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  afterEach(() => localStorage.clear());
+
+  function panel(): MatExpansionPanel {
+    return fixture.debugElement.query(By.directive(MatExpansionPanel))
+      .componentInstance;
+  }
+
+  function header(): HTMLElement {
+    return fixture.nativeElement.querySelector(
+      'mat-expansion-panel-header'
+    ) as HTMLElement;
+  }
+
+  function expand(): void {
+    if (!panel().expanded) {
+      header().click();
+      fixture.detectChanges();
+    }
+  }
+
+  function fill(
+    currentPassword = 'current-pass',
+    newPassword = 'new-password',
+    confirmPassword = 'new-password'
+  ): void {
+    expand();
+    component.changeForm.setValue({
+      currentPassword,
+      newPassword,
+      confirmPassword,
+    });
+    component.changeForm.markAllAsTouched();
+    fixture.detectChanges();
+  }
+
+  it('starts collapsed', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const wrapper = compiled.querySelector(
+      '.mat-expansion-panel-content-wrapper'
+    );
+
+    expect(panel().expanded).toBe(false);
+    expect(
+      compiled.querySelector('mat-expansion-panel')?.classList
+    ).not.toContain('mat-expanded');
+    expect(wrapper?.hasAttribute('inert')).toBe(true);
+    expect(header().textContent).toContain('Security');
+  });
+
+  it('expands and collapses when the header is clicked', () => {
+    expand();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(panel().expanded).toBe(true);
+    expect(
+      compiled.querySelector('mat-expansion-panel')?.classList
+    ).toContain('mat-expanded');
+    expect(
+      compiled
+        .querySelector('.mat-expansion-panel-content-wrapper')
+        ?.hasAttribute('inert')
+    ).toBe(false);
+
+    header().click();
+    fixture.detectChanges();
+
+    expect(panel().expanded).toBe(false);
+    expect(
+      compiled
+        .querySelector('.mat-expansion-panel-content-wrapper')
+        ?.hasAttribute('inert')
+    ).toBe(true);
+  });
+
+  it('renders the password form for email/password accounts', () => {
+    expand();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('form')).not.toBeNull();
+    expect(compiled.textContent).toContain('Current password');
+    expect(compiled.textContent).toContain('Update password');
+  });
+
+  it('lists password tips above the form', () => {
+    expand();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const tips = compiled.querySelector('.password-card__tips') as HTMLElement;
+    const form = compiled.querySelector('form') as HTMLElement;
+
+    expect(compiled.textContent).toContain('Password tips');
+    expect(compiled.querySelectorAll('.password-card__tips-list li').length).toBe(
+      3
+    );
+    expect(compiled.textContent).toContain('Pick a password');
+    expect(
+      tips.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
+  });
+
+  it('rejects a mismatched confirmation without calling Firebase', async () => {
+    fill('current-pass', 'new-password', 'different-pass');
+
+    await component.onSubmit();
+
+    expect(changePassword).not.toHaveBeenCalled();
+    expect(fixture.nativeElement.textContent).toContain(
+      'Passwords do not match.'
+    );
+  });
+
+  it('rejects reusing the current password', async () => {
+    fill('same-password', 'same-password', 'same-password');
+
+    await component.onSubmit();
+
+    expect(changePassword).not.toHaveBeenCalled();
+    expect(fixture.nativeElement.textContent).toContain(
+      'Choose a password different from your current one.'
+    );
+  });
+
+  it('changes the password and clears the form', async () => {
+    fill();
+
+    await component.onSubmit();
+
+    expect(changePassword).toHaveBeenCalledWith(
+      'current-pass',
+      'new-password'
+    );
+    expect(component.changeForm.getRawValue().currentPassword).toBe('');
+  });
+
+  it('shows an error when Firebase rejects the current password', async () => {
+    changePassword.and.rejectWith(
+      new Error('Your current password is incorrect.')
+    );
+    fill();
+
+    await component.onSubmit();
+    fixture.detectChanges();
+
+    expect(component.errorMessage()).toBe(
+      'Your current password is incorrect.'
+    );
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector(
+        '.password-card__alert'
+      )?.textContent
+    ).toContain('Your current password is incorrect.');
+  });
+
+  it('explains that social accounts have no password', () => {
+    authState.set({
+      ...(authState() as Record<string, unknown>),
+      providerData: [{ providerId: 'google.com' }],
+    });
+    fixture.detectChanges();
+    expand();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('form')).toBeNull();
+    expect(compiled.querySelector('.password-card__tips')).toBeNull();
+    expect(
+      compiled.querySelector('.password-card__note')?.textContent
+    ).toContain('google.com');
+  });
+});
