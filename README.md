@@ -1,6 +1,11 @@
 # BdgEditor23
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.6 and has since been upgraded to Angular 22.
+
+## Requirements
+
+- Node.js 24 (see `.nvmrc`) — run `nvm use` before installing dependencies.
+- Firebase web app configuration lives in `src/app/core/firebase.ts`.
 
 ## Development server
 
@@ -12,7 +17,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/bdg-editor23/browser` directory.
 
 ## Running unit tests
 
