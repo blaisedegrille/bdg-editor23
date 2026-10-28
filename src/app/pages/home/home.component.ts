@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectionStrategy } from '@angular/core';
 import { EditorService } from 'src/app/service/editor.service';
 import { MatButton, MatAnchor } from '@angular/material/button';
 import { MatDivider } from '@angular/material/divider';
@@ -7,6 +7,7 @@ import { MatDivider } from '@angular/material/divider';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatButton, MatAnchor, MatDivider]
 })
 export class HomeComponent implements OnInit {

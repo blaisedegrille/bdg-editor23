@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ModeToggleService } from './mode-toggle.service';
 import { ModeLocalStorageService } from './mode-storage.service';
 import { Mode } from './mode-toggle.model';
@@ -9,6 +9,7 @@ import { MatIcon } from '@angular/material/icon';
   selector: 'ang23-mode-toggle',
   templateUrl: './mode-toggle.component.html',
   styleUrls: ['./mode-toggle.component.scss'],
+  changeDetection: ChangeDetectionStrategy.Eager,
   imports: [MatIconButton, MatIcon]
 })
 export class ModeToggleComponent implements OnInit {
