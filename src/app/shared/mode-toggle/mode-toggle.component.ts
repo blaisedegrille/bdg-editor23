@@ -4,9 +4,10 @@ import { ModeLocalStorageService } from './mode-storage.service';
 import { Mode } from './mode-toggle.model';
 
 @Component({
-  selector: 'ang23-mode-toggle',
-  templateUrl: './mode-toggle.component.html',
-  styleUrls: ['./mode-toggle.component.scss'],
+    selector: 'ang23-mode-toggle',
+    templateUrl: './mode-toggle.component.html',
+    styleUrls: ['./mode-toggle.component.scss'],
+    standalone: false
 })
 export class ModeToggleComponent implements OnInit {
   icon_name = 'dark_mode';

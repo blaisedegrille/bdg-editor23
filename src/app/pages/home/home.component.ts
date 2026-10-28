@@ -4,9 +4,10 @@ import { config } from 'rxjs';
 import { EditorService } from 'src/app/service/editor.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
+    selector: 'app-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    standalone: false
 })
 export class HomeComponent implements OnInit {
   editorService = inject(EditorService);
