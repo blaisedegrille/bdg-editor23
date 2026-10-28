@@ -11,8 +11,7 @@ describe('ForgotPasswordComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [ForgotPasswordComponent],
+      imports: [RouterTestingModule, ForgotPasswordComponent],
       providers: [{ provide: AuthService, useValue: authServiceStub }],
     });
     fixture = TestBed.createComponent(ForgotPasswordComponent);

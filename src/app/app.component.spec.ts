@@ -1,22 +1,27 @@
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterTestingModule } from '@angular/router/testing';
+
 import { AppComponent } from './app.component';
-import { MaterialModule } from './shared/material.module';
-import { ModeToggleModule } from './shared/mode-toggle/mode-toggle.module';
+import {
+  MODE_STORAGE_SERVICE,
+  ModeLocalStorageService,
+} from './shared/mode-toggle/mode-storage.service';
+import { ModeToggleService } from './shared/mode-toggle/mode-toggle.service';
 
 describe('AppComponent', () => {
-  beforeEach(() =>
+  beforeEach(() => {
+    localStorage.clear();
     TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        MaterialModule,
-        ModeToggleModule,
-        NoopAnimationsModule,
+      imports: [RouterTestingModule, NoopAnimationsModule, AppComponent],
+      providers: [
+        ModeToggleService,
+        { provide: MODE_STORAGE_SERVICE, useClass: ModeLocalStorageService },
       ],
-      declarations: [AppComponent],
-    })
-  );
+    });
+  });
+
+  afterEach(() => localStorage.clear());
 
   it('should create the app', () => {
     const fixture = TestBed.createComponent(AppComponent);

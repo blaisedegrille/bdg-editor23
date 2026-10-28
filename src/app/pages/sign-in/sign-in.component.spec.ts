@@ -11,8 +11,7 @@ describe('SignInComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule],
-      declarations: [SignInComponent],
+      imports: [RouterTestingModule, SignInComponent],
       providers: [{ provide: AuthService, useValue: authServiceStub }],
     });
     fixture = TestBed.createComponent(SignInComponent);
