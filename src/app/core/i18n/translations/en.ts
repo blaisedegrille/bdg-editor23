@@ -158,6 +158,11 @@ export const en = {
     'This account signs in with {provider}, so there is no password to change here.',
   'profile.security.showPassword': 'Show password',
   'profile.security.hidePassword': 'Hide password',
+  'profile.security.tips.title': 'Password tips',
+  'profile.security.tips.length': 'Use at least 8 characters.',
+  'profile.security.tips.unique':
+    "Pick a password you don't use anywhere else.",
+  'profile.security.tips.manager': 'A password manager makes this easy.',
 
   'auth.email': 'Email',
   'auth.emailRequired': 'Email is required.',

@@ -159,6 +159,11 @@ export const hu: Record<TranslationKey, string> = {
     'Ez a fiók {provider} használatával jelentkezik be, ezért itt nincs módosítható jelszó.',
   'profile.security.showPassword': 'Jelszó megjelenítése',
   'profile.security.hidePassword': 'Jelszó elrejtése',
+  'profile.security.tips.title': 'Jelszótippek',
+  'profile.security.tips.length': 'Használj legalább 8 karaktert.',
+  'profile.security.tips.unique':
+    'Válassz olyan jelszót, amelyet máshol nem használsz.',
+  'profile.security.tips.manager': 'Egy jelszókezelő megkönnyíti ezt.',
 
   'auth.email': 'E-mail',
   'auth.emailRequired': 'Az e-mail megadása kötelező.',

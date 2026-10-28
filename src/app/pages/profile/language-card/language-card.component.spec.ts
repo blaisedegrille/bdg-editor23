@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatSelect } from '@angular/material/select';
+import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { I18nService } from 'src/app/core/i18n/i18n.service';
@@ -43,6 +45,44 @@ describe('LanguageCardComponent', () => {
     await component.selectLanguage('de');
 
     expect(setLanguage).toHaveBeenCalledWith('de');
+  });
+
+  it('shows the active language with its flag in the closed field', async () => {
+    // MatSelect resolves its initial value in a microtask.
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const value = compiled.querySelector('.mat-mdc-select-value');
+
+    expect(value?.querySelector('app-language-flag')).not.toBeNull();
+    expect(value?.textContent).toContain('English');
+
+    TestBed.inject(I18nService).setLanguage('de');
+    fixture.detectChanges();
+
+    expect(value?.textContent).toContain('Deutsch');
+  });
+
+  it('shows a flag next to every option', () => {
+    const select = fixture.debugElement.query(By.directive(MatSelect))
+      .componentInstance as MatSelect;
+
+    select.open();
+    fixture.detectChanges();
+
+    const options = Array.from(document.querySelectorAll('mat-option'));
+    expect(options.length).toBe(3);
+    expect(options.map((option) => option.textContent?.trim())).toEqual([
+      'English',
+      'Deutsch',
+      'Magyar',
+    ]);
+    expect(
+      document.querySelectorAll('mat-option app-language-flag').length
+    ).toBe(3);
+
+    select.close();
   });
 
   it('mentions offline syncing when the account update fails', async () => {

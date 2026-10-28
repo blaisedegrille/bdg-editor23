@@ -18,8 +18,20 @@
         [attr.aria-label]="'profile.language.label' | t"
         (selectionChange)="selectLanguage($event.value)"
       >
+        <mat-select-trigger>
+          <span class="language-card__option">
+            <app-language-flag [code]="i18n.language()" />
+            <span>{{ selectedName }}</span>
+          </span>
+        </mat-select-trigger>
+
         @for (language of languages; track language.code) {
-          <mat-option [value]="language.code">{{ language.name }}</mat-option>
+          <mat-option [value]="language.code">
+            <span class="language-card__option">
+              <app-language-flag [code]="language.code" />
+              <span>{{ language.name }}</span>
+            </span>
+          </mat-option>
         }
       </mat-select>
     </mat-form-field>

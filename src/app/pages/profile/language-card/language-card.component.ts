@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectModule, MatSelectTrigger } from '@angular/material/select';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import {
@@ -12,6 +12,7 @@ import {
 } from 'src/app/core/i18n/language';
 import { I18nService } from 'src/app/core/i18n/i18n.service';
 import { UserPreferencesService } from 'src/app/core/user-preferences.service';
+import { LanguageFlagComponent } from 'src/app/shared/language-flag/language-flag.component';
 import { TranslatePipe } from 'src/app/shared/translate.pipe';
 
 @Component({
@@ -24,7 +25,9 @@ import { TranslatePipe } from 'src/app/shared/translate.pipe';
     MatFormFieldModule,
     MatIconModule,
     MatSelectModule,
+    MatSelectTrigger,
     MatSnackBarModule,
+    LanguageFlagComponent,
     TranslatePipe,
   ],
 })
@@ -37,6 +40,11 @@ export class LanguageCardComponent {
     code,
     name: LANGUAGE_NAMES[code],
   }));
+
+  /** Native name of the active language, shown in the closed select trigger. */
+  get selectedName(): string {
+    return LANGUAGE_NAMES[this.i18n.language()];
+  }
 
   async selectLanguage(language: Language): Promise<void> {
     const synced = await this.preferences.setLanguage(language);

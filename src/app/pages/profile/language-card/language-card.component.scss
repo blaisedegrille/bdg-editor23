@@ -26,3 +26,9 @@
 .language-card__field {
   width: 100%;
 }
+
+.language-card__option {
+  display: flex;
+  gap: 0.625rem;
+  align-items: center;
+}

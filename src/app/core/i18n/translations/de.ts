@@ -161,6 +161,11 @@ export const de: Record<TranslationKey, string> = {
     'Dieses Konto meldet sich über {provider} an, daher gibt es hier kein Passwort zu ändern.',
   'profile.security.showPassword': 'Passwort anzeigen',
   'profile.security.hidePassword': 'Passwort verbergen',
+  'profile.security.tips.title': 'Passwort-Tipps',
+  'profile.security.tips.length': 'Verwende mindestens 8 Zeichen.',
+  'profile.security.tips.unique':
+    'Wähle ein Passwort, das du nirgendwo sonst verwendest.',
+  'profile.security.tips.manager': 'Ein Passwortmanager macht das einfach.',
 
   'auth.email': 'E-Mail',
   'auth.emailRequired': 'E-Mail ist erforderlich.',

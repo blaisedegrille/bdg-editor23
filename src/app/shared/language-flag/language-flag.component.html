@@ -1,0 +1,28 @@
+<svg
+  class="language-flag"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 60 40"
+  aria-hidden="true"
+  focusable="false"
+>
+  @switch (code()) {
+    @case ('en') {
+      <!-- Simplified Union Jack: crosses and diagonals only. -->
+      <rect width="60" height="40" fill="#012169" />
+      <path d="M0 0 60 40M60 0 0 40" stroke="#ffffff" stroke-width="8" />
+      <path d="M0 0 60 40M60 0 0 40" stroke="#c8102e" stroke-width="4" />
+      <path d="M30 0V40M0 20H60" stroke="#ffffff" stroke-width="13" />
+      <path d="M30 0V40M0 20H60" stroke="#c8102e" stroke-width="8" />
+    }
+    @case ('de') {
+      <rect width="60" height="13.34" fill="#000000" />
+      <rect y="13.33" width="60" height="13.34" fill="#dd0000" />
+      <rect y="26.67" width="60" height="13.33" fill="#ffce00" />
+    }
+    @case ('hu') {
+      <rect width="60" height="13.34" fill="#ce2939" />
+      <rect y="13.33" width="60" height="13.34" fill="#ffffff" />
+      <rect y="26.67" width="60" height="13.33" fill="#477050" />
+    }
+  }
+</svg>

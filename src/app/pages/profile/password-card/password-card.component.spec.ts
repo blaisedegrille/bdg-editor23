@@ -66,6 +66,16 @@ describe('PasswordCardComponent', () => {
     expect(compiled.textContent).toContain('Update password');
   });
 
+  it('lists password tips beside the form', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.textContent).toContain('Password tips');
+    expect(compiled.querySelectorAll('.password-card__tips-list li').length).toBe(
+      3
+    );
+    expect(compiled.textContent).toContain('Pick a password');
+  });
+
   it('rejects a mismatched confirmation without calling Firebase', async () => {
     fill('current-pass', 'new-password', 'different-pass');
 
@@ -128,6 +138,7 @@ describe('PasswordCardComponent', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('form')).toBeNull();
+    expect(compiled.querySelector('.password-card__tips')).toBeNull();
     expect(
       compiled.querySelector('.password-card__note')?.textContent
     ).toContain('google.com');
