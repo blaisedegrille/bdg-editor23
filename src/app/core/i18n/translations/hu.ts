@@ -141,7 +141,7 @@ export const hu: Record<TranslationKey, string> = {
   'profile.language.syncFailed':
     'A nyelv ezen az eszközön mentve. Online állapotban szinkronizálódik.',
   'profile.security.title': 'Biztonság',
-  'profile.security.subtitle': 'Módosítsd a bejelentkezési jelszavadat.',
+  'profile.security.subtitle': 'Jelszó frissítése',
   'profile.security.current': 'Jelenlegi jelszó',
   'profile.security.new': 'Új jelszó',
   'profile.security.confirm': 'Új jelszó megerősítése',

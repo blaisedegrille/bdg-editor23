@@ -90,7 +90,9 @@ describe('ProfileComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector('app-language-card')).not.toBeNull();
-    expect(compiled.querySelector('app-password-card')).not.toBeNull();
+    expect(
+      compiled.querySelector('.profile__grid app-password-card')
+    ).not.toBeNull();
     expect(compiled.textContent).toContain('Language');
     expect(compiled.textContent).toContain('Security');
   });

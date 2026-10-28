@@ -141,8 +141,7 @@ export const de: Record<TranslationKey, string> = {
   'profile.language.syncFailed':
     'Sprache auf diesem Gerät gespeichert. Sie wird synchronisiert, sobald du online bist.',
   'profile.security.title': 'Sicherheit',
-  'profile.security.subtitle':
-    'Ändere das Passwort, mit dem du dich anmeldest.',
+  'profile.security.subtitle': 'Passwort aktualisieren',
   'profile.security.current': 'Aktuelles Passwort',
   'profile.security.new': 'Neues Passwort',
   'profile.security.confirm': 'Neues Passwort bestätigen',

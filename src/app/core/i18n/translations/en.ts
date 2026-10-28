@@ -139,7 +139,7 @@ export const en = {
   'profile.language.syncFailed':
     "Language saved on this device. It will sync when you're online.",
   'profile.security.title': 'Security',
-  'profile.security.subtitle': 'Change the password you use to sign in.',
+  'profile.security.subtitle': 'Update password',
   'profile.security.current': 'Current password',
   'profile.security.new': 'New password',
   'profile.security.confirm': 'Confirm new password',

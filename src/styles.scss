@@ -38,3 +38,8 @@ body.dark {
   padding-left: 15px;
   padding-right: 15px;
 }
+
+// Align the security panel body with its card-style header.
+app-password-card .mat-expansion-panel-body {
+  padding: 0 1rem 1rem;
+}
