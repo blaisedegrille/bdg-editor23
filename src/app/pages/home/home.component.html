@@ -1,32 +1,89 @@
-<div class="container">
-  <h1>Home</h1>
-  <section>
-    <div class="example-label">Raised</div>
-    <div class="example-button-row">
-      <button mat-raised-button>Basic</button>
-      <button mat-raised-button color="primary">Primary</button>
-      <button mat-raised-button color="accent">Accent</button>
-      <button mat-raised-button color="warn">Warn</button>
-      <button mat-raised-button disabled>Disabled</button>
-      <a mat-raised-button href="https://www.google.com/" target="_blank"
-        >Link</a
-      >
+<div class="home">
+  <section class="home__hero">
+    <span class="home__orb home__orb--primary" aria-hidden="true"></span>
+    <span class="home__orb home__orb--tertiary" aria-hidden="true"></span>
+
+    <div class="home__identity">
+      <span class="home__avatar" aria-hidden="true">
+        @if (photoUrl) {
+          <img [src]="photoUrl" alt="" />
+        } @else {
+          {{ userInitials }}
+        }
+      </span>
+
+      <div class="home__intro">
+        <p class="home__eyebrow">Your workspace</p>
+        <h1 class="home__title">{{ greeting }}, {{ userName }}</h1>
+        <p class="home__subtitle">
+          Pick up a draft or start something new — everything is saved as you go.
+        </p>
+      </div>
+    </div>
+
+    <div class="home__stats" aria-label="Article statistics">
+      <div class="home__stat">
+        <span class="home__stat-value">{{ articleCount }}</span>
+        <span class="home__stat-label">Articles</span>
+      </div>
+      <div class="home__stat">
+        <span class="home__stat-value">{{ draftCount }}</span>
+        <span class="home__stat-label">Drafts</span>
+      </div>
+      <div class="home__stat">
+        <span class="home__stat-value">{{ publishedCount }}</span>
+        <span class="home__stat-label">Published</span>
+      </div>
+    </div>
+
+    <div class="home__actions">
+      <a mat-flat-button routerLink="/editor">
+        <mat-icon>edit_note</mat-icon>
+        New article
+      </a>
+      <a mat-stroked-button routerLink="/articles">
+        <mat-icon>article</mat-icon>
+        Manage articles
+      </a>
     </div>
   </section>
-  <br />
-  <mat-divider></mat-divider>
-  <br />
-  <section>
-    <div class="example-label">Stroked</div>
-    <div class="example-button-row">
-      <button mat-stroked-button>Basic</button>
-      <button mat-stroked-button color="primary">Primary</button>
-      <button mat-stroked-button color="accent">Accent</button>
-      <button mat-stroked-button color="warn">Warn</button>
-      <button mat-stroked-button disabled>Disabled</button>
-      <a mat-stroked-button href="https://www.google.com/" target="_blank"
-        >Link</a
-      >
-    </div>
+
+  <section class="home__articles">
+    <header class="home__section-header">
+      <div>
+        <h2>Your articles</h2>
+        <p>Every draft and published story, newest first.</p>
+      </div>
+
+      @if (syncing()) {
+        <span class="home__syncing">
+          <mat-spinner diameter="16" />
+          Syncing…
+        </span>
+      }
+    </header>
+
+    @if (articles.length) {
+      <div class="home__grid">
+        @for (article of articles; track article.id) {
+          <app-article [article]="article" [showDelete]="false" />
+        }
+      </div>
+    } @else if (syncing()) {
+      <div class="home__loading">
+        <mat-spinner diameter="28" />
+        <span>Loading your articles…</span>
+      </div>
+    } @else {
+      <div class="home__empty">
+        <mat-icon aria-hidden="true">article</mat-icon>
+        <h2>No articles yet</h2>
+        <p>Start with a title and a few blocks — saving is instant and local.</p>
+        <a mat-flat-button routerLink="/editor">
+          <mat-icon>edit_note</mat-icon>
+          Write your first article
+        </a>
+      </div>
+    }
   </section>
 </div>

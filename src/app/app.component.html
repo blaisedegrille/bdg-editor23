@@ -18,17 +18,26 @@
 
     <span class="example-spacer"></span>
 
-    @if (authService.userData; as user) {
-      <div class="app-user" [title]="user.email ?? ''">
+    @if (authService.userId) {
+      <a
+        class="app-user"
+        routerLink="/profile"
+        routerLinkActive="app-user--active"
+        [attr.aria-label]="'Open profile for ' + (userName || 'this user')"
+        matTooltip="Your profile"
+      >
         <span class="app-user__avatar" aria-hidden="true">
-          @if (user.photoURL) {
-            <img [src]="user.photoURL" alt="" />
+          @if (authService.userData?.photoURL) {
+            <img [src]="authService.userData?.photoURL ?? ''" alt="" />
           } @else {
             {{ userInitials }}
           }
         </span>
         <span class="app-user__name">{{ userName }}</span>
-      </div>
+        <mat-icon class="app-user__chevron" aria-hidden="true">
+          chevron_right
+        </mat-icon>
+      </a>
 
       <button
         mat-icon-button

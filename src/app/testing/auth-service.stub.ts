@@ -22,6 +22,9 @@ export const authServiceStub = {
   get userLabel(): string {
     return 'Test User';
   },
+  get userEmail(): string {
+    return 'test@example.com';
+  },
   SignIn: () => Promise.resolve(),
   SignUp: () => Promise.resolve(),
   SendVerificationMail: () => Promise.resolve(),

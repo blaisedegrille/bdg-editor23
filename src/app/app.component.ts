@@ -13,7 +13,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
 import { AuthService } from './core/auth.service';
-import { userDisplayName, userInitials as toInitials } from './core/user-display';
+import { userInitials as toInitials } from './core/user-display';
 import { Menu } from './models/menu';
 import { ModeToggleComponent } from './shared/mode-toggle/mode-toggle.component';
 
@@ -45,7 +45,6 @@ export class AppComponent {
   title = 'bdg-editor23';
   componentList: Menu[] = [
     { name: 'Home', route: 'home', icon: 'home' },
-    { name: 'Dashboard', route: 'dashboard', icon: 'space_dashboard' },
     { name: 'Editor', route: 'editor', icon: 'edit_note' },
     { name: 'Articles', route: 'articles', icon: 'article' },
     /*     { name: 'User', route: 'user', locked: true },
@@ -54,7 +53,7 @@ export class AppComponent {
 
   /** Best available label for the signed in user. */
   get userName(): string {
-    return userDisplayName(this.authService.userData);
+    return this.authService.userLabel;
   }
 
   /** One or two uppercase letters for the avatar placeholder. */

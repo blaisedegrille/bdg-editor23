@@ -75,7 +75,7 @@ export class AuthService {
     try {
       const result = await signInWithEmailAndPassword(auth, email, password);
       await this.SetUserData(result.user);
-      await this.router.navigate(['dashboard']);
+      await this.router.navigate(['home']);
     } catch (error) {
       throw toAuthError(error);
     }
@@ -146,6 +146,11 @@ export class AuthService {
   /** Human readable author name, also available before Firebase rehydrates. */
   get userLabel(): string {
     return userDisplayName(this.userData ?? this.cachedUser);
+  }
+
+  /** Email address, falling back to the cached user on reload. */
+  get userEmail(): string {
+    return this.userData?.email ?? this.cachedUser?.email ?? '';
   }
 
   /* Setting up user data when sign in with username/password,

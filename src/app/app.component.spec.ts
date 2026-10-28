@@ -63,7 +63,7 @@ describe('AppComponent', () => {
       compiled.querySelectorAll('mat-list-item .mat-mdc-list-item-title')
     ).map((element) => element.textContent?.trim());
 
-    expect(labels).toEqual(['Home', 'Dashboard', 'Editor', 'Articles']);
+    expect(labels).toEqual(['Home', 'Editor', 'Articles']);
   });
 
   it('should show the signed in user in the header', () => {
@@ -77,9 +77,22 @@ describe('AppComponent', () => {
     );
   });
 
+  it('should link the header identity to the profile page', () => {
+    const compiled = createApp().nativeElement as HTMLElement;
+    const profileLink = compiled.querySelector('a.app-user');
+
+    expect(profileLink?.getAttribute('href')).toBe('/profile');
+    expect(profileLink?.getAttribute('aria-label')).toContain('Test User');
+  });
+
   it('should hide the user block when signed out', () => {
     TestBed.overrideProvider(AuthService, {
-      useValue: { ...authServiceStub, userData: null },
+      useValue: {
+        ...authServiceStub,
+        userData: null,
+        userId: null,
+        userLabel: '',
+      },
     });
     const compiled = createApp().nativeElement as HTMLElement;
 
