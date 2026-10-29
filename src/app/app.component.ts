@@ -49,6 +49,7 @@ export class AppComponent {
   componentList: Menu[] = [
     { labelKey: 'app.nav.home', route: 'home', icon: 'home' },
     { labelKey: 'app.nav.editor', route: 'editor', icon: 'edit_note' },
+    { labelKey: 'app.nav.read', route: 'read', icon: 'menu_book' },
     { labelKey: 'app.nav.articles', route: 'articles', icon: 'article' },
     /*     { name: 'User', route: 'user', locked: true },
     { name: 'Settings', route: 'settings', locked: true }, */

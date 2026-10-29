@@ -32,6 +32,8 @@
     "codex-notifier": "^1.1.2",
     "codex-tooltip": "^1.0.5",
     "firebase": "^13.1.0",
+    "idb": "^8.0.4",
+    "ngx-extended-pdf-viewer": "^31.0.1",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.16.3"
