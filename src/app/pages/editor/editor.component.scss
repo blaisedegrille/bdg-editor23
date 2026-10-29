@@ -13,6 +13,7 @@
 }
 
 .editor-page__toolbar {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
@@ -20,6 +21,9 @@
 }
 
 .editor-page__back {
+  position: absolute;
+  left: -3.25rem;
+  top: 0.5rem;
   flex: 0 0 auto;
 }
 
@@ -63,6 +67,19 @@
 
 .editor-page__spacer {
   flex: 1 1 auto;
+}
+
+.editor-page__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+@media (max-width: 1100px) {
+  .editor-page__back {
+    left: -0.5rem;
+  }
 }
 
 .editor-page__canvas {
@@ -114,8 +131,7 @@
     display: none;
   }
 
-  .editor-page__toolbar button[mat-flat-button],
-  .editor-page__toolbar button[mat-stroked-button] {
+  .editor-page__actions button {
     flex: 1 1 auto;
   }
 }
