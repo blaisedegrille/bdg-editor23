@@ -2,12 +2,22 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // A user can only read and write their own profile and articles.
+    // A user can only access their own profile, articles, and reading library.
     match /users/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
 
       match /articles/{articleId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
+
+      match /readingDocuments/{documentId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+
+        match /{recordType}/{recordId} {
+          allow read, write: if request.auth != null
+            && request.auth.uid == userId
+            && recordType in ['annotations', 'notes'];
+        }
       }
     }
   }

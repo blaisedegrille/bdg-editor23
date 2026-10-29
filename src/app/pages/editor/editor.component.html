@@ -49,25 +49,6 @@
       </button>
     }
 
-    <button
-      mat-stroked-button
-      type="button"
-      [disabled]="saving() || publishing()"
-      (click)="saveDraft()"
-    >
-      <mat-icon>save</mat-icon>
-      {{ (saving() ? 'editor.saving' : 'editor.save') | t }}
-    </button>
-
-    <button
-      mat-flat-button
-      type="button"
-      [disabled]="saving() || publishing()"
-      (click)="publish()"
-    >
-      <mat-icon>cloud_upload</mat-icon>
-      {{ (publishing() ? 'editor.publishing' : 'editor.publish') | t }}
-    </button>
   </header>
 
   @if (notFound()) {
@@ -88,4 +69,26 @@
   >
     <div #editorHolder class="editor-page__holder"></div>
   </mat-card>
+
+  <div class="editor-page__actions">
+    <button
+      mat-stroked-button
+      type="button"
+      [disabled]="saving() || publishing()"
+      (click)="saveDraft()"
+    >
+      <mat-icon>save</mat-icon>
+      {{ (saving() ? 'editor.saving' : 'editor.save') | t }}
+    </button>
+
+    <button
+      mat-flat-button
+      type="button"
+      [disabled]="saving() || publishing()"
+      (click)="publish()"
+    >
+      <mat-icon>cloud_upload</mat-icon>
+      {{ (publishing() ? 'editor.publishing' : 'editor.publish') | t }}
+    </button>
+  </div>
 </div>

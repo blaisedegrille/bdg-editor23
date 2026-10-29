@@ -103,25 +103,34 @@ require the generated file, so run `npm run config:firebase` once after cloning.
 
 ## 🔥 Firebase setup
 
-Publishing writes to the `users/{uid}/articles/{id}` subcollection. Deploy the
-included security rules once before publishing for the first time:
+Publishing writes to the `users/{uid}/articles/{id}` subcollection. Read &
+Highlight stores local-only PDFs in browser IndexedDB. If you want to upload PDFs
+to your account, first create/enable a Firebase Storage bucket in the Firebase
+console. Cloud PDFs are stored in Storage; per-user metadata, highlights, and
+notes live in Firestore. Each selected file is limited to 50 MB, and cloud
+upload is an explicit choice.
+
+Deploy the included Firestore and Storage security rules before using cloud
+publishing or PDF uploads:
 
 ```bash
 npx firebase-tools login
-npx firebase-tools deploy --only firestore:rules
+npx firebase-tools deploy --only firestore:rules,storage
 ```
 
-The rules are scoped so that each user can only read and write their own profile
-and articles. Deploying replaces the Firestore rules currently configured in the
-console — merge them if the project uses other collections.
+The rules only allow each signed-in user to access their own profile, articles,
+reading metadata, notes, annotations, and PDFs. Deploying replaces the rules
+currently configured in the console — merge them if the project uses other
+collections. Local-only PDFs never leave the browser; cloud documents are
+available to the same account on other devices.
 
 ## 🗂 Project structure
 
 ```text
 src/app/
-├── core/       Firebase setup, auth, i18n, guards, article cloud + sync services
-├── models/     Typed domain models and article helpers
-├── pages/      Routed screens: home, profile, editor, articles, auth
+├── core/       Firebase setup, auth, i18n, guards, article + reading services
+├── models/     Typed domain models and article/reading helpers
+├── pages/      Routed screens: home, profile, editor, reader, articles, auth
 ├── service/    Local-first article store
 ├── shared/     Reusable UI such as the article renderer and auth card
 └── testing/    Spec stubs and fixtures

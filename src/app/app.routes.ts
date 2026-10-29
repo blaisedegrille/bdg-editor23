@@ -28,6 +28,14 @@ export const routes: Routes = [
     canActivate: [authGuard],
   },
   { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
+  {
+    path: 'read',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/read-and-highlight/read-and-highlight.component').then(
+        (module) => module.ReadAndHighlightComponent,
+      ),
+  },
   { path: 'dashboard', redirectTo: 'profile' },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'sign-in', component: SignInComponent },

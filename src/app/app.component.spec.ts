@@ -69,7 +69,7 @@ describe('AppComponent', () => {
       compiled.querySelectorAll('mat-list-item .mat-mdc-list-item-title')
     ).map((element) => element.textContent?.trim());
 
-    expect(labels).toEqual(['Home', 'Editor', 'Articles']);
+    expect(labels).toEqual(['Home', 'Editor', 'Read & Highlight', 'Articles']);
   });
 
   it('should show the signed in user in the header', () => {

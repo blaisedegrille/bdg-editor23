@@ -100,6 +100,22 @@ describe('EditorComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
+  it('places the save and publish actions below the editor canvas', async () => {
+    const fixture = await createComponent();
+    const page = fixture.nativeElement.querySelector('.editor-page') as HTMLElement;
+    const title = page.querySelector('.editor-page__title');
+    const canvas = page.querySelector('.editor-page__canvas');
+    const actions = page.querySelector('.editor-page__actions');
+
+    expect(title).not.toBeNull();
+    expect(canvas).not.toBeNull();
+    expect(actions).not.toBeNull();
+    expect(
+      canvas!.compareDocumentPosition(actions!) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(actions!.querySelectorAll('button').length).toBe(2);
+  });
+
   it('saves the editor content as a local draft', async () => {
     const fixture = await createComponent();
     const component = fixture.componentInstance;
