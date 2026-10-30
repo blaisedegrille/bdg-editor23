@@ -4,9 +4,6 @@
 >
   <header class="text-reader__heading">
     <div>
-      @if (activeDocument()) {
-        <p class="text-reader__eyebrow">{{ 'textReader.currentReader' | t }}</p>
-      }
       <h1>{{ 'textReader.title' | t }}</h1>
       <p class="text-reader__subtitle">{{ 'textReader.subtitle' | t }}</p>
     </div>
@@ -189,7 +186,7 @@
 
               <article
                 class="text-reader-content"
-                [style.fontSize.em]="textScale()"
+                [style.fontSize.px]="16 * textScale()"
                 (mouseup)="captureSelection()"
                 (keyup)="captureSelection()"
                 (touchend)="captureSelection()"

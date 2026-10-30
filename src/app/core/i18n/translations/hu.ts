@@ -67,7 +67,7 @@ export const hu: Record<TranslationKey, string> = {
   'reader.deleteFailed': 'A dokumentum törlése nem sikerült.',
   'reader.cloudUnavailable': 'A helyi dokumentumok elérhetők, de a felhőkönyvtár nem tölthető be.',
 
-  'textReader.title': 'Olvasás és kiemelés — szövegolvasó',
+  'textReader.title': 'Szövegolvasó',
   'textReader.subtitle': 'A PDF-ből kinyert szöveg tiszta, újratördelhető olvasófelületen.',
   'textReader.currentReader': 'Szövegolvasó',
   'textReader.switchReader': 'Eredeti PDF-megjelenítő megnyitása',

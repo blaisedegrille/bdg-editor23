@@ -144,26 +144,19 @@ app-password-card .mat-expansion-panel-body {
   background: var(--mat-sys-surface-container-low);
 }
 
-// Once a document is open, the text page becomes an editorial reading surface.
+// Match the open text reader's shell to the PDF reader while keeping the
+// extracted content reflowable.
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader__heading {
-  align-items: flex-end;
-  padding-bottom: 1.25rem;
+  align-items: center;
+  padding-bottom: 0.75rem;
   border-bottom: 1px solid var(--mat-sys-outline-variant);
-}
-
-.text-reader.text-reader--editorial .text-reader__eyebrow {
-  color: var(--mat-sys-tertiary);
-  font: var(--mat-sys-label-large);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader__heading h1 {
   color: var(--mat-sys-on-surface);
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font: var(--mat-sys-title-large);
+  font-family: Roboto, sans-serif;
   font-weight: 500;
-  letter-spacing: -0.025em;
 }
 
 .text-reader.text-reader--editorial .text-reader__subtitle {
@@ -171,49 +164,56 @@ app-password-card .mat-expansion-panel-body {
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-toolbar {
-  padding-inline: 0;
-  border: 0;
-  border-bottom: 1px solid var(--mat-sys-outline-variant);
-  border-radius: 0;
-  background: transparent;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-high);
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-toolbar__document > span:first-of-type {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-size: var(--mat-sys-title-large-size, 1.375rem);
+  font: var(--mat-sys-title-medium);
+  font-family: Roboto, sans-serif;
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-reading {
-  overflow: visible;
-  border: 0;
-  background: transparent;
+  overflow: hidden;
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-high);
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-reading__controls {
-  border: 0;
-  background: transparent;
+  padding: 0.25rem 0.75rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  background: var(--mat-sys-surface-container-high);
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-content {
-  max-width: 76ch;
-  min-height: 68vh;
-  padding: clamp(1.5rem, 4vw, 3.5rem);
-  border: 1px solid var(--mat-sys-outline-variant);
-  border-radius: var(--mat-sys-corner-large);
-  background: var(--mat-sys-surface-container-lowest);
-  box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 7%);
+  max-width: 75ch;
+  min-height: 60vh;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: transparent;
+  box-shadow: none;
+  font: var(--mat-sys-body-large);
+  font-family: Roboto, sans-serif;
+  line-height: 1.7;
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-notes {
-  border: 0;
-  border-inline-start: 3px solid var(--mat-sys-tertiary);
-  border-radius: var(--mat-sys-corner-medium);
-  background: var(--mat-sys-surface-container-low);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface);
 }
 
 .text-reader.text-reader--editorial.text-reader--document-open .text-reader-notes h2 {
-  font-family: Georgia, 'Times New Roman', serif;
-  font-weight: 500;
+  font: var(--mat-sys-title-large);
+}
+
+.text-reader.text-reader--editorial.text-reader--document-open .text-reader-content h2 {
+  margin: 1.5em 0 0.5em;
+  font: var(--mat-sys-title-large);
+  font-family: Roboto, sans-serif;
+  line-height: 1.3;
 }
 
 // Keep the original PDF viewer compact and tool-oriented after opening a PDF.

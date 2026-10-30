@@ -67,7 +67,7 @@ export const de: Record<TranslationKey, string> = {
   'reader.deleteFailed': 'Dokument konnte nicht gelöscht werden.',
   'reader.cloudUnavailable': 'Deine lokalen Dokumente sind verfügbar; die Cloud-Bibliothek konnte nicht geladen werden.',
 
-  'textReader.title': 'Lesen & Markieren — Textleser',
+  'textReader.title': 'Textleser',
   'textReader.subtitle': 'Extrahierter PDF-Text in einer klaren, anpassbaren Leseansicht.',
   'textReader.currentReader': 'Textleser',
   'textReader.switchReader': 'Original-PDF-Viewer öffnen',

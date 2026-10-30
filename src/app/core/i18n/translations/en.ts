@@ -68,7 +68,7 @@ export const en = {
   'reader.deleteFailed': 'Could not delete this document.',
   'reader.cloudUnavailable': 'Your local documents remain available; the cloud library could not be loaded.',
 
-  'textReader.title': 'Read & Highlight — Text reader',
+  'textReader.title': 'Text Reader',
   'textReader.subtitle': 'Extracted PDF text in a clean, reflowable reading view.',
   'textReader.currentReader': 'Text reader',
   'textReader.switchReader': 'Open original PDF viewer',
