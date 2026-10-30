@@ -72,7 +72,7 @@ describe('AppComponent', () => {
     expect(labels).toEqual([
       'Home',
       'Editor',
-      'Read & Highlight',
+      'PDF Viewer',
       'Read & Highlight (Text)',
       'Articles',
     ]);

@@ -171,7 +171,9 @@
 }
 
 .example-sidenav {
-  width: 15rem;
+  width: max-content;
+  min-width: 0;
+  max-width: calc(100vw - 2rem);
   padding-top: 0;
   border-right: 1px solid var(--mat-sys-outline-variant);
   background-color: var(--mat-sys-surface-container-low);
@@ -188,8 +190,15 @@
 .example-sidenav mat-nav-list {
   display: flex;
   flex-direction: column;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box;
   gap: 0.25rem;
   padding: 0.25rem 0.5rem 1rem;
+}
+
+.example-sidenav [matListItemTitle] {
+  white-space: nowrap;
 }
 
 .example-spacer {

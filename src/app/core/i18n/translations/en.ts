@@ -11,7 +11,7 @@ export const en = {
   'app.nav.home': 'Home',
   'app.nav.editor': 'Editor',
   'app.nav.articles': 'Articles',
-  'app.nav.read': 'Read & Highlight',
+  'app.nav.read': 'PDF Viewer',
   'app.nav.readText': 'Read & Highlight (Text)',
   'app.toolbar.toggleMenu': 'Toggle navigation menu',
   'app.brand.home': 'Go to the home page',

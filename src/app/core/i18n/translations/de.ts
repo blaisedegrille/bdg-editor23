@@ -10,7 +10,7 @@ export const de: Record<TranslationKey, string> = {
   'app.nav.home': 'Startseite',
   'app.nav.editor': 'Editor',
   'app.nav.articles': 'Artikel',
-  'app.nav.read': 'Lesen & Markieren',
+  'app.nav.read': 'PDF-Viewer',
   'app.nav.readText': 'Lesen & Markieren (Text)',
   'app.toolbar.toggleMenu': 'Navigationsmenü umschalten',
   'app.brand.home': 'Zur Startseite',

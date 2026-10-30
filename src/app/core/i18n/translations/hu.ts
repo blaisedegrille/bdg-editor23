@@ -10,7 +10,7 @@ export const hu: Record<TranslationKey, string> = {
   'app.nav.home': 'Kezdőlap',
   'app.nav.editor': 'Szerkesztő',
   'app.nav.articles': 'Cikkek',
-  'app.nav.read': 'Olvasás és kiemelés',
+  'app.nav.read': 'PDF-megjelenítő',
   'app.nav.readText': 'Olvasás és kiemelés (szöveg)',
   'app.toolbar.toggleMenu': 'Navigációs menü ki- és bekapcsolása',
   'app.brand.home': 'Ugrás a kezdőlapra',
