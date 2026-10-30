@@ -4,8 +4,8 @@
 >
   <header class="text-reader__heading">
     <div>
-      <h1>{{ 'textReader.title' | t }}</h1>
-      <p class="text-reader__subtitle">{{ 'textReader.subtitle' | t }}</p>
+      <h1>{{ "textReader.title" | t }}</h1>
+      <p class="text-reader__subtitle">{{ "textReader.subtitle" | t }}</p>
     </div>
     @if (activeDocument(); as document) {
       <div class="text-reader__heading-actions">
@@ -15,11 +15,11 @@
           [queryParams]="{ documentId: document.id }"
         >
           <mat-icon>picture_as_pdf</mat-icon>
-          {{ 'textReader.switchReader' | t }}
+          {{ "textReader.switchReader" | t }}
         </a>
         <button mat-stroked-button type="button" (click)="closeDocument()">
           <mat-icon>close</mat-icon>
-          {{ 'reader.close' | t }}
+          {{ "reader.close" | t }}
         </button>
       </div>
     }
@@ -36,13 +36,16 @@
 
   @if (loadingDocument()) {
     <div class="text-reader__progress" role="status">
-      <span>{{ 'reader.opening' | t }}</span>
+      <span>{{ "reader.opening" | t }}</span>
       <mat-progress-bar mode="indeterminate" />
     </div>
   }
   @if (extractionProgress() !== null) {
     <div class="text-reader__progress" role="status">
-      <span>{{ 'textReader.extractProgress' | t }} — {{ extractionProgress() }}%</span>
+      <span
+        >{{ "textReader.extractProgress" | t }} —
+        {{ extractionProgress() }}%</span
+      >
       <mat-progress-bar mode="determinate" [value]="extractionProgress()" />
     </div>
   }
@@ -57,22 +60,30 @@
       <div class="text-reader-import__copy">
         <mat-icon aria-hidden="true">picture_as_pdf</mat-icon>
         <div>
-          <h2 id="text-reader-import-title">{{ 'reader.choosePdf' | t }}</h2>
-          <p>{{ 'reader.fileHint' | t }}</p>
+          <h2 id="text-reader-import-title">{{ "reader.choosePdf" | t }}</h2>
+          <p>{{ "reader.fileHint" | t }}</p>
         </div>
       </div>
       <label class="text-reader-file-picker">
-        <span>{{ 'reader.choosePdf' | t }}</span>
-        <input type="file" accept="application/pdf,.pdf" (change)="onFileSelected($event)" />
+        <span>{{ "reader.choosePdf" | t }}</span>
+        <input
+          type="file"
+          accept="application/pdf,.pdf"
+          (change)="onFileSelected($event)"
+        />
       </label>
 
       @if (pendingFile(); as file) {
         <div class="text-reader-import__pending">
           <span>{{ file.name }}</span>
           <div class="text-reader-import__actions">
-            <button mat-stroked-button type="button" (click)="openPendingLocally()">
+            <button
+              mat-stroked-button
+              type="button"
+              (click)="openPendingLocally()"
+            >
               <mat-icon>devices</mat-icon>
-              {{ 'reader.openLocal' | t }}
+              {{ "reader.openLocal" | t }}
             </button>
             <button
               mat-flat-button
@@ -81,33 +92,40 @@
               (click)="uploadPendingToCloud()"
             >
               <mat-icon>cloud_upload</mat-icon>
-              {{ 'reader.uploadCloud' | t }}
+              {{ "reader.uploadCloud" | t }}
             </button>
           </div>
         </div>
       }
       @if (uploadProgress() !== null) {
         <div class="text-reader-import__progress" role="status">
-          <span>{{ 'reader.uploading' | t }} — {{ uploadProgress() }}%</span>
+          <span>{{ "reader.uploading" | t }} — {{ uploadProgress() }}%</span>
           <mat-progress-bar mode="determinate" [value]="uploadProgress()" />
         </div>
       }
     </section>
 
-    <section class="text-reader-library" aria-labelledby="text-reader-library-title">
-      <h2 id="text-reader-library-title">{{ 'reader.documents' | t }}</h2>
+    <section
+      class="text-reader-library"
+      aria-labelledby="text-reader-library-title"
+    >
+      <h2 id="text-reader-library-title">{{ "reader.documents" | t }}</h2>
       @if (documents().length === 0) {
-        <p>{{ 'reader.noDocuments' | t }}</p>
+        <p>{{ "reader.noDocuments" | t }}</p>
       } @else {
         @for (document of documents(); track document.id) {
           <article class="text-reader-document">
             <mat-icon aria-hidden="true">picture_as_pdf</mat-icon>
             <div class="text-reader-document__copy">
               <h3>{{ document.name }}</h3>
-              <span>{{ document.storageMode === 'cloud' ? ('reader.cloudBadge' | t) : ('reader.localBadge' | t) }}</span>
+              <span>{{
+                document.storageMode === "cloud"
+                  ? ("reader.cloudBadge" | t)
+                  : ("reader.localBadge" | t)
+              }}</span>
             </div>
             <button mat-button type="button" (click)="openDocument(document)">
-              {{ 'reader.open' | t }}
+              {{ "reader.open" | t }}
             </button>
             <button
               mat-icon-button
@@ -122,28 +140,54 @@
       }
     </section>
   } @else {
-    <section class="text-reader-workspace" [attr.aria-label]="activeDocument()?.name">
+    <section
+      class="text-reader-workspace"
+      [attr.aria-label]="activeDocument()?.name"
+    >
       <header class="text-reader-toolbar">
         <div class="text-reader-toolbar__document">
           <mat-icon aria-hidden="true">description</mat-icon>
           <span>{{ activeDocument()?.name }}</span>
           <span class="text-reader-badge">
-            {{ activeDocument()?.storageMode === 'cloud' ? ('reader.cloudBadge' | t) : ('reader.localBadge' | t) }}
+            {{
+              activeDocument()?.storageMode === "cloud"
+                ? ("reader.cloudBadge" | t)
+                : ("reader.localBadge" | t)
+            }}
           </span>
         </div>
-        <form class="text-reader-search" (submit)="$event.preventDefault(); searchDocument()">
+        <form
+          class="text-reader-search"
+          (submit)="$event.preventDefault(); searchDocument()"
+        >
           <mat-form-field appearance="outline" subscriptSizing="dynamic">
-            <mat-label>{{ 'reader.searchPlaceholder' | t }}</mat-label>
-            <input matInput [value]="searchTerm()" (input)="onSearchInput($event)" />
+            <mat-label>{{ "reader.searchPlaceholder" | t }}</mat-label>
+            <input
+              matInput
+              [value]="searchTerm()"
+              (input)="onSearchInput($event)"
+            />
           </mat-form-field>
           <button mat-flat-button type="submit">
             <mat-icon>search</mat-icon>
-            {{ 'reader.search' | t }}
+            {{ "reader.search" | t }}
           </button>
-          <button mat-icon-button type="button" [disabled]="searchHits().length === 0" [attr.aria-label]="'reader.previousMatch' | t" (click)="changeSearchHit(-1)">
+          <button
+            mat-icon-button
+            type="button"
+            [disabled]="searchHits().length === 0"
+            [attr.aria-label]="'reader.previousMatch' | t"
+            (click)="changeSearchHit(-1)"
+          >
             <mat-icon>keyboard_arrow_up</mat-icon>
           </button>
-          <button mat-icon-button type="button" [disabled]="searchHits().length === 0" [attr.aria-label]="'reader.nextMatch' | t" (click)="changeSearchHit(1)">
+          <button
+            mat-icon-button
+            type="button"
+            [disabled]="searchHits().length === 0"
+            [attr.aria-label]="'reader.nextMatch' | t"
+            (click)="changeSearchHit(1)"
+          >
             <mat-icon>keyboard_arrow_down</mat-icon>
           </button>
         </form>
@@ -151,35 +195,69 @@
 
       @if (searching()) {
         <div class="text-reader__progress" role="status">
-          <span>{{ 'textReader.searching' | t }} {{ searchProgress() }}%</span>
+          <span>{{ "textReader.searching" | t }} {{ searchProgress() }}%</span>
           <mat-progress-bar mode="determinate" [value]="searchProgress()" />
         </div>
       }
       @if (searchHits().length > 0) {
         <p class="text-reader__message" role="status">
-          {{ 'textReader.searchResults' | t: { count: searchHits().length } }}
+          {{ "textReader.searchResults" | t: { count: searchHits().length } }}
         </p>
       } @else if (searchTerm().trim() && !searching()) {
-        <p class="text-reader__message" role="status">{{ 'textReader.noSearchResults' | t }}</p>
+        <p class="text-reader__message" role="status">
+          {{ "textReader.noSearchResults" | t }}
+        </p>
       }
 
       @if (extractedDocument(); as content) {
         @if (content.pages.length > 0) {
           <div class="text-reader__layout">
-            <section class="text-reader-reading" aria-label="{{ activeDocument()?.name }}">
-              <div class="text-reader-reading__controls" role="group" [attr.aria-label]="'textReader.pageControls' | t">
-                <button mat-icon-button type="button" [disabled]="currentPage() <= 1" [attr.aria-label]="'textReader.previousPage' | t" (click)="changePage(-1)">
+            <section
+              class="text-reader-reading"
+              aria-label="{{ activeDocument()?.name }}"
+            >
+              <div
+                class="text-reader-reading__controls"
+                role="group"
+                [attr.aria-label]="'textReader.pageControls' | t"
+              >
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="currentPage() <= 1"
+                  [attr.aria-label]="'textReader.previousPage' | t"
+                  (click)="changePage(-1)"
+                >
                   <mat-icon>chevron_left</mat-icon>
                 </button>
-                <span>{{ 'textReader.pageOf' | t: { page: currentPage(), total: content.pages.length } }}</span>
-                <button mat-icon-button type="button" [disabled]="currentPage() >= content.pages.length" [attr.aria-label]="'textReader.nextPage' | t" (click)="changePage(1)">
+                <span>{{
+                  "textReader.pageOf"
+                    | t: { page: currentPage(), total: content.pages.length }
+                }}</span>
+                <button
+                  mat-icon-button
+                  type="button"
+                  [disabled]="currentPage() >= content.pages.length"
+                  [attr.aria-label]="'textReader.nextPage' | t"
+                  (click)="changePage(1)"
+                >
                   <mat-icon>chevron_right</mat-icon>
                 </button>
                 <span class="text-reader-reading__spacer"></span>
-                <button mat-icon-button type="button" [attr.aria-label]="'textReader.fontSmaller' | t" (click)="changeTextSize(-0.1)">
+                <button
+                  mat-icon-button
+                  type="button"
+                  [attr.aria-label]="'textReader.fontSmaller' | t"
+                  (click)="changeTextSize(-0.1)"
+                >
                   <mat-icon>text_decrease</mat-icon>
                 </button>
-                <button mat-icon-button type="button" [attr.aria-label]="'textReader.fontLarger' | t" (click)="changeTextSize(0.1)">
+                <button
+                  mat-icon-button
+                  type="button"
+                  [attr.aria-label]="'textReader.fontLarger' | t"
+                  (click)="changeTextSize(0.1)"
+                >
                   <mat-icon>text_increase</mat-icon>
                 </button>
               </div>
@@ -192,33 +270,57 @@
                 (touchend)="captureSelection()"
               >
                 <p class="text-reader-content__source">
-                  {{ 'reader.page' | t: { page: currentPage() } }}
+                  {{ "reader.page" | t: { page: currentPage() } }}
                 </p>
-                @for (block of renderedBlocks(); track block.id; let last = $last) {
-                  @if (block.kind === 'heading') {
+                @for (
+                  block of renderedBlocks();
+                  track block.id;
+                  let last = $last
+                ) {
+                  @if (block.kind === "heading") {
                     <h2 [style.fontSize.em]="block.fontSizeRatio">
-                      @for (segment of block.segments; track segment.startOffset) {
+                      @for (
+                        segment of block.segments;
+                        track segment.startOffset
+                      ) {
                         <span
                           class="text-reader-segment"
-                          [class.text-reader-segment--highlight]="!!segment.highlightColor"
-                          [class.text-reader-segment--search]="segment.searchMatch"
-                          [style.backgroundColor]="segment.highlightColor ?? null"
+                          [class.text-reader-segment--highlight]="
+                            !!segment.highlightColor
+                          "
+                          [class.text-reader-segment--search]="
+                            segment.searchMatch
+                          "
+                          [style.backgroundColor]="
+                            segment.highlightColor ?? null
+                          "
                           [attr.data-offset-start]="segment.startOffset"
                           [attr.data-offset-end]="segment.endOffset"
-                        >{{ segment.text }}</span>
+                          >{{ segment.text }}</span
+                        >
                       }
                     </h2>
                   } @else {
                     <p [class.text-reader-content__bold]="block.bold">
-                      @for (segment of block.segments; track segment.startOffset) {
+                      @for (
+                        segment of block.segments;
+                        track segment.startOffset
+                      ) {
                         <span
                           class="text-reader-segment"
-                          [class.text-reader-segment--highlight]="!!segment.highlightColor"
-                          [class.text-reader-segment--search]="segment.searchMatch"
-                          [style.backgroundColor]="segment.highlightColor ?? null"
+                          [class.text-reader-segment--highlight]="
+                            !!segment.highlightColor
+                          "
+                          [class.text-reader-segment--search]="
+                            segment.searchMatch
+                          "
+                          [style.backgroundColor]="
+                            segment.highlightColor ?? null
+                          "
                           [attr.data-offset-start]="segment.startOffset"
                           [attr.data-offset-end]="segment.endOffset"
-                        >{{ segment.text }}</span>
+                          >{{ segment.text }}</span
+                        >
                       }
                     </p>
                   }
@@ -228,7 +330,8 @@
                       aria-hidden="true"
                       [attr.data-offset-start]="block.endOffset"
                       [attr.data-offset-end]="block.endOffset + 2"
-                    >{{ '\n\n' }}</span>
+                      >{{ "\n\n" }}</span
+                    >
                   }
                 }
               </article>
@@ -241,73 +344,169 @@
                   [style.left.px]="passage.menuX"
                   [style.top.px]="passage.menuY"
                 >
-                  <button mat-icon-button type="button" [attr.aria-label]="'reader.highlight' | t" (mousedown)="$event.preventDefault()" (click)="highlightSelection()">
-                    <mat-icon>format_ink_highlighter</mat-icon>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'reader.highlight' | t"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="highlightSelection()"
+                  >
+                    <span class="material-symbols-outlined">
+                      ink_highlighter
+                    </span>
                   </button>
-                  <button mat-icon-button type="button" [attr.aria-label]="'textReader.addNote' | t" (mousedown)="$event.preventDefault()" (click)="openNoteEditor('note')">
-                    <mat-icon>note_add</mat-icon>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'textReader.addNote' | t"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="openNoteEditor('note')"
+                  >
+                    <mat-icon>edit_note</mat-icon>
                   </button>
-                  <button mat-icon-button type="button" [attr.aria-label]="'textReader.addComment' | t" (mousedown)="$event.preventDefault()" (click)="openNoteEditor('comment')">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'textReader.addComment' | t"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="openNoteEditor('comment')"
+                  >
                     <mat-icon>add_comment</mat-icon>
                   </button>
-                  <button mat-icon-button type="button" [attr.aria-label]="'reader.searchSelection' | t" (mousedown)="$event.preventDefault()" (click)="searchSelection()">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'reader.searchSelection' | t"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="searchSelection()"
+                  >
                     <mat-icon>manage_search</mat-icon>
                   </button>
-                  <button mat-icon-button type="button" [attr.aria-label]="'reader.copy' | t" (mousedown)="$event.preventDefault()" (click)="copySelection()">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    [attr.aria-label]="'reader.copy' | t"
+                    (mousedown)="$event.preventDefault()"
+                    (click)="copySelection()"
+                  >
                     <mat-icon>content_copy</mat-icon>
                   </button>
                 </div>
               }
             </section>
 
-            <aside class="text-reader-notes" aria-labelledby="text-reader-notes-title">
-              <h2 id="text-reader-notes-title">{{ 'reader.notes' | t }}</h2>
+            <aside
+              class="text-reader-notes"
+              aria-labelledby="text-reader-notes-title"
+            >
+              <h2 id="text-reader-notes-title">{{ "reader.notes" | t }}</h2>
               @if (noteEditorOpen()) {
-                <form class="text-reader-note-editor" (submit)="$event.preventDefault(); saveNote()">
-                  @if (selectedPassage(); as passage) { <blockquote>{{ passage.quote }}</blockquote> }
-                  @else if (editingNote(); as note) { <blockquote>{{ note.quote }}</blockquote> }
-                  <p>{{ noteKind() === 'comment' ? ('textReader.comment' | t) : ('textReader.note' | t) }}</p>
+                <form
+                  class="text-reader-note-editor"
+                  (submit)="$event.preventDefault(); saveNote()"
+                >
+                  @if (selectedPassage(); as passage) {
+                    <blockquote>{{ passage.quote }}</blockquote>
+                  } @else if (editingNote(); as note) {
+                    <blockquote>{{ note.quote }}</blockquote>
+                  }
+                  <p>
+                    {{
+                      noteKind() === "comment"
+                        ? ("textReader.comment" | t)
+                        : ("textReader.note" | t)
+                    }}
+                  </p>
                   <mat-form-field appearance="outline">
-                    <mat-label>{{ 'reader.noteLabel' | t }}</mat-label>
-                    <textarea matInput rows="4" [value]="noteBody()" [placeholder]="'reader.notePlaceholder' | t" (input)="onNoteInput($event)"></textarea>
+                    <mat-label>{{ "reader.noteLabel" | t }}</mat-label>
+                    <textarea
+                      matInput
+                      rows="4"
+                      [value]="noteBody()"
+                      [placeholder]="'reader.notePlaceholder' | t"
+                      (input)="onNoteInput($event)"
+                    ></textarea>
                   </mat-form-field>
                   <div class="text-reader-note-editor__actions">
-                    <button mat-button type="button" (click)="cancelNote()">{{ 'reader.cancel' | t }}</button>
-                    <button mat-flat-button type="submit">{{ 'reader.saveNote' | t }}</button>
+                    <button mat-button type="button" (click)="cancelNote()">
+                      {{ "reader.cancel" | t }}
+                    </button>
+                    <button mat-flat-button type="submit">
+                      {{ "reader.saveNote" | t }}
+                    </button>
                   </div>
                 </form>
               }
               @if (notes().length === 0) {
-                <p class="text-reader-empty">{{ 'reader.noNotes' | t }}</p>
+                <p class="text-reader-empty">{{ "reader.noNotes" | t }}</p>
               } @else {
                 @for (note of notes(); track note.id) {
                   <article class="text-reader-note">
                     <p class="text-reader-note__meta">
-                      {{ note.kind === 'comment' ? ('textReader.comment' | t) : ('textReader.note' | t) }}
-                      · {{ 'reader.page' | t: { page: note.pageIndex + 1 } }}
+                      {{
+                        note.kind === "comment"
+                          ? ("textReader.comment" | t)
+                          : ("textReader.note" | t)
+                      }}
+                      · {{ "reader.page" | t: { page: note.pageIndex + 1 } }}
                     </p>
                     <blockquote>{{ note.quote }}</blockquote>
-                    @if (note.body) { <p>{{ note.body }}</p> }
+                    @if (note.body) {
+                      <p>{{ note.body }}</p>
+                    }
                     <div class="text-reader-note__actions">
-                      <button mat-button type="button" (click)="goToNote(note)">{{ 'reader.goToPage' | t }}</button>
-                      <button mat-icon-button type="button" [attr.aria-label]="'textReader.editNote' | t" (click)="editNote(note)"><mat-icon>edit</mat-icon></button>
-                      <button mat-icon-button type="button" [attr.aria-label]="'reader.removeNote' | t" (click)="removeNote(note)"><mat-icon>delete_outline</mat-icon></button>
+                      <button mat-button type="button" (click)="goToNote(note)">
+                        {{ "reader.goToPage" | t }}
+                      </button>
+                      <button
+                        mat-icon-button
+                        type="button"
+                        [attr.aria-label]="'textReader.editNote' | t"
+                        (click)="editNote(note)"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button
+                        mat-icon-button
+                        type="button"
+                        [attr.aria-label]="'reader.removeNote' | t"
+                        (click)="removeNote(note)"
+                      >
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
                     </div>
                   </article>
                 }
               }
 
-              <h2>{{ 'textReader.highlights' | t }}</h2>
+              <h2>{{ "textReader.highlights" | t }}</h2>
               @if (highlights().length === 0) {
-                <p class="text-reader-empty">{{ 'textReader.noHighlights' | t }}</p>
+                <p class="text-reader-empty">
+                  {{ "textReader.noHighlights" | t }}
+                </p>
               } @else {
                 @for (highlight of highlights(); track highlight.id) {
                   <article class="text-reader-note">
-                    <p class="text-reader-note__meta">{{ 'reader.page' | t: { page: highlight.pageIndex + 1 } }}</p>
+                    <p class="text-reader-note__meta">
+                      {{ "reader.page" | t: { page: highlight.pageIndex + 1 } }}
+                    </p>
                     <blockquote>{{ highlight.quote }}</blockquote>
                     <div class="text-reader-note__actions">
-                      <button mat-button type="button" (click)="goToHighlight(highlight)">{{ 'reader.goToPage' | t }}</button>
-                      <button mat-icon-button type="button" [attr.aria-label]="'textReader.removeHighlight' | t" (click)="removeHighlight(highlight)"><mat-icon>delete_outline</mat-icon></button>
+                      <button
+                        mat-button
+                        type="button"
+                        (click)="goToHighlight(highlight)"
+                      >
+                        {{ "reader.goToPage" | t }}
+                      </button>
+                      <button
+                        mat-icon-button
+                        type="button"
+                        [attr.aria-label]="'textReader.removeHighlight' | t"
+                        (click)="removeHighlight(highlight)"
+                      >
+                        <mat-icon>delete_outline</mat-icon>
+                      </button>
                     </div>
                   </article>
                 }
@@ -315,7 +514,9 @@
             </aside>
           </div>
         } @else {
-          <p class="text-reader__message" role="status">{{ 'textReader.noText' | t }}</p>
+          <p class="text-reader__message" role="status">
+            {{ "textReader.noText" | t }}
+          </p>
         }
       }
     </section>
