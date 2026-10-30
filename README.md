@@ -35,6 +35,12 @@ light or dark theme.
 - **Publishing to Firestore** under `users/{uid}/articles/{id}`, with a graceful
   fallback that keeps the local draft when a publish fails.
 - **Article reader** at `/articles/:id` with a custom block renderer.
+- **Two PDF reading experiences**: `/read` displays the original PDF with
+  `ngx-extended-pdf-viewer`; **Read & Highlight (Text)** at `/read-text` extracts
+  PDF text with PDF.js and presents reflowable, selectable text. Both share
+  documents and notes; their highlight data stays separate. Extracted text is
+  cached locally, not uploaded to Firebase. PDF layout reconstruction is best
+  effort; scanned/image-only PDFs need OCR and are not supported yet.
 - **Light and dark themes** driven by Angular Material system tokens.
 
 ## 🧱 Tech stack
@@ -44,6 +50,7 @@ light or dark theme.
 | Framework | Angular 22 — standalone components, signals, `ChangeDetectionStrategy.Eager` |
 | UI | Angular Material 3 |
 | Editor | Editor.js with the header and list tools |
+| PDF text extraction | Mozilla PDF.js (`pdfjs-dist`) |
 | Backend | Firebase Auth + Cloud Firestore |
 | Async | RxJS |
 | Tests | Karma + Jasmine |

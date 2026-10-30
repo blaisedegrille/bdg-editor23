@@ -1,7 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { EditorAnnotation } from 'ngx-extended-pdf-viewer';
 
-import { ReadingDocument, ReadingNote } from '../models/reading-document';
+import {
+  PdfJsHighlight,
+  ExtractedTextDocument,
+  ReadingDocument,
+  ReadingNote,
+  TextHighlight,
+} from '../models/reading-document';
 import { ReadingLibraryService } from './reading-library.service';
 
 describe('ReadingLibraryService', () => {
@@ -60,5 +66,69 @@ describe('ReadingLibraryService', () => {
     expect(await service.getFile(id)).toBeUndefined();
     expect(await service.getAnnotations(id)).toEqual([]);
     expect(await service.listNotes(id)).toEqual([]);
+  });
+
+  it('stores custom PDF.js highlights separately from ngx annotations', async () => {
+    const documentId = crypto.randomUUID();
+    const highlight: PdfJsHighlight = {
+      id: crypto.randomUUID(),
+      documentId,
+      pageIndex: 2,
+      quote: 'Custom PDF.js highlight',
+      rects: [{ x: 0.1, y: 0.2, width: 0.3, height: 0.04 }],
+      color: '#ffe05a',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      syncPending: true,
+    };
+
+    await service.savePdfJsHighlight(highlight);
+    expect(await service.listPdfJsHighlights(documentId)).toEqual([highlight]);
+
+    await service.setPdfJsHighlightSyncPending(highlight.id, false);
+    expect((await service.listPdfJsHighlights(documentId))[0].syncPending).toBeFalse();
+
+    await service.deletePdfJsHighlight(highlight.id);
+    expect(await service.listPdfJsHighlights(documentId)).toEqual([]);
+  });
+
+  it('caches extracted text and offset-based highlights without modifying legacy annotations', async () => {
+    const documentId = crypto.randomUUID();
+    const extracted: ExtractedTextDocument = {
+      documentId,
+      extractedAt: new Date().toISOString(),
+      pages: [{
+        pageIndex: 0,
+        text: 'A formatted paragraph.',
+        blocks: [{
+          id: '0-0',
+          kind: 'paragraph',
+          text: 'A formatted paragraph.',
+          startOffset: 0,
+          endOffset: 22,
+          fontSizeRatio: 1,
+          bold: false,
+        }],
+      }],
+    };
+    const highlight: TextHighlight = {
+      id: crypto.randomUUID(),
+      documentId,
+      pageIndex: 0,
+      startOffset: 2,
+      endOffset: 11,
+      quote: 'formatted',
+      color: '#ffe05a',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      syncPending: true,
+    };
+
+    await service.saveExtractedText(extracted);
+    await service.saveTextHighlight(highlight);
+
+    expect(await service.getExtractedText(documentId)).toEqual(extracted);
+    expect(await service.listTextHighlights(documentId)).toEqual([highlight]);
+    expect(await service.getAnnotations(documentId)).toEqual([]);
   });
 });

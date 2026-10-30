@@ -17,7 +17,12 @@ import {
 } from 'firebase/storage';
 import type { EditorAnnotation } from 'ngx-extended-pdf-viewer';
 
-import { ReadingDocument, ReadingNote } from '../models/reading-document';
+import {
+  PdfJsHighlight,
+  ReadingDocument,
+  ReadingNote,
+  TextHighlight,
+} from '../models/reading-document';
 import { firebaseApp, db } from './firebase';
 
 const MAX_PDF_BYTES = 50 * 1024 * 1024;
@@ -177,12 +182,104 @@ export class ReadingCloudService {
     );
   }
 
+  async loadPdfJsHighlights(
+    ownerId: string,
+    documentId: string,
+  ): Promise<PdfJsHighlight[]> {
+    const snapshot = await getDocs(
+      collection(
+        db,
+        'users',
+        ownerId,
+        'readingDocuments',
+        documentId,
+        'pdfjsHighlights',
+      ),
+    );
+    return snapshot.docs.map((entry) => entry.data() as PdfJsHighlight);
+  }
+
+  async savePdfJsHighlight(
+    ownerId: string,
+    highlight: PdfJsHighlight,
+  ): Promise<void> {
+    const payload = { ...highlight };
+    delete payload.syncPending;
+    await setDoc(
+      doc(
+        db,
+        'users',
+        ownerId,
+        'readingDocuments',
+        highlight.documentId,
+        'pdfjsHighlights',
+        highlight.id,
+      ),
+      payload,
+    );
+  }
+
+  async deletePdfJsHighlight(
+    ownerId: string,
+    documentId: string,
+    highlightId: string,
+  ): Promise<void> {
+    await deleteDoc(
+      doc(
+        db,
+        'users',
+        ownerId,
+        'readingDocuments',
+        documentId,
+        'pdfjsHighlights',
+        highlightId,
+      ),
+    );
+  }
+
+  async loadTextHighlights(
+    ownerId: string,
+    documentId: string,
+  ): Promise<TextHighlight[]> {
+    const snapshot = await getDocs(
+      collection(db, 'users', ownerId, 'readingDocuments', documentId, 'textHighlights'),
+    );
+    return snapshot.docs.map((entry) => entry.data() as TextHighlight);
+  }
+
+  async saveTextHighlight(ownerId: string, highlight: TextHighlight): Promise<void> {
+    const payload = { ...highlight };
+    delete payload.syncPending;
+    await setDoc(
+      doc(
+        db,
+        'users',
+        ownerId,
+        'readingDocuments',
+        highlight.documentId,
+        'textHighlights',
+        highlight.id,
+      ),
+      payload,
+    );
+  }
+
+  async deleteTextHighlight(
+    ownerId: string,
+    documentId: string,
+    highlightId: string,
+  ): Promise<void> {
+    await deleteDoc(
+      doc(db, 'users', ownerId, 'readingDocuments', documentId, 'textHighlights', highlightId),
+    );
+  }
+
   async deleteDocument(document: ReadingDocument): Promise<void> {
     const { ownerId, id, storagePath } = document;
     if (storagePath) {
       await deleteObject(ref(storage, storagePath));
     }
-    for (const subcollection of ['annotations', 'notes']) {
+    for (const subcollection of ['annotations', 'notes', 'pdfjsHighlights', 'textHighlights']) {
       const records = await getDocs(
         collection(db, 'users', ownerId, 'readingDocuments', id, subcollection),
       );

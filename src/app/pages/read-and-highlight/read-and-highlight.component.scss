@@ -35,6 +35,10 @@
   font: var(--mat-sys-headline-small);
 }
 
+.reader-page--document-open .reader-page__heading h1 {
+  font: var(--mat-sys-title-large);
+}
+
 .reader-page__subtitle {
   margin: 0.25rem 0 0;
   color: var(--mat-sys-on-surface-variant);
@@ -322,6 +326,7 @@
   color: var(--mat-sys-primary);
   font: var(--mat-sys-label-medium);
 }
+
 
 @media (max-width: 900px) {
   .reader-workspace__body {
