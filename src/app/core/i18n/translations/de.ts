@@ -20,8 +20,8 @@ export const de: Record<TranslationKey, string> = {
   'app.signOut': 'Abmelden',
   'app.modeToggle': 'Helles oder dunkles Design umschalten',
 
-  'reader.title': 'Lesen & Markieren',
-  'reader.subtitle': 'PDFs lesen, durchsuchen, Stellen markieren und Notizen speichern.',
+  'reader.title': 'PDF-Viewer',
+  'reader.subtitle': 'Zeigt das ursprüngliche Dokumentlayout und PDF-Markierungen.',
   'reader.choosePdf': 'PDF auswählen',
   'reader.fileHint': 'Textbasierte PDFs bis 50 MB werden unterstützt.',
   'reader.openLocal': 'Lokal öffnen',

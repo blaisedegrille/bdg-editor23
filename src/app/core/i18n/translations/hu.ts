@@ -20,8 +20,8 @@ export const hu: Record<TranslationKey, string> = {
   'app.signOut': 'Kijelentkezés',
   'app.modeToggle': 'Világos vagy sötét téma váltása',
 
-  'reader.title': 'Olvasás és kiemelés',
-  'reader.subtitle': 'Olvass PDF-eket, keress, emelj ki részeket és készíts jegyzeteket.',
+  'reader.title': 'PDF-megjelenítő',
+  'reader.subtitle': 'Az eredeti dokumentumelrendezés és PDF-jelölések megjelenítése.',
   'reader.choosePdf': 'PDF kiválasztása',
   'reader.fileHint': 'Az 50 MB-nál kisebb, szöveges PDF-ek támogatottak.',
   'reader.openLocal': 'Megnyitás helyben',

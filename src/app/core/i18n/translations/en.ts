@@ -21,8 +21,8 @@ export const en = {
   'app.signOut': 'Sign out',
   'app.modeToggle': 'Switch light or dark theme',
 
-  'reader.title': 'Read & Highlight',
-  'reader.subtitle': 'Read PDFs, search, highlight passages, and keep notes.',
+  'reader.title': 'PDF Viewer',
+  'reader.subtitle': 'View the original document layout and its PDF annotations.',
   'reader.choosePdf': 'Choose a PDF',
   'reader.fileHint': 'Text-based PDFs up to 50 MB are supported.',
   'reader.openLocal': 'Open locally',

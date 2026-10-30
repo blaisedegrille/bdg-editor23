@@ -117,3 +117,112 @@ app-password-card .mat-expansion-panel-body {
   justify-content: flex-end;
   gap: 0.25rem;
 }
+
+// The text reader is an editorial surface, intentionally distinct from the
+// compact, tool-oriented PDF viewer at /read.
+.text-reader.text-reader--editorial .text-reader__heading {
+  align-items: flex-end;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.text-reader.text-reader--editorial .text-reader__eyebrow {
+  color: var(--mat-sys-tertiary);
+  font: var(--mat-sys-label-large);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.text-reader.text-reader--editorial .text-reader__heading h1 {
+  color: var(--mat-sys-on-surface);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.text-reader.text-reader--editorial .text-reader__subtitle {
+  max-width: 42rem;
+}
+
+.text-reader.text-reader--editorial .text-reader-import {
+  min-height: 8rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  border: 1px dashed var(--mat-sys-tertiary);
+  border-inline-start: 4px solid var(--mat-sys-tertiary);
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container-lowest);
+}
+
+.text-reader.text-reader--editorial .text-reader-toolbar {
+  padding-inline: 0;
+  border: 0;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  border-radius: 0;
+  background: transparent;
+}
+
+.text-reader.text-reader--editorial .text-reader-toolbar__document > span:first-of-type {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: var(--mat-sys-title-large-size, 1.375rem);
+}
+
+.text-reader.text-reader--editorial .text-reader-reading {
+  overflow: visible;
+  border: 0;
+  background: transparent;
+}
+
+.text-reader.text-reader--editorial .text-reader-reading__controls {
+  border: 0;
+  background: transparent;
+}
+
+.text-reader.text-reader--editorial .text-reader-content {
+  max-width: 76ch;
+  min-height: 68vh;
+  padding: clamp(1.5rem, 4vw, 3.5rem);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-large);
+  background: var(--mat-sys-surface-container-lowest);
+  box-shadow: 0 0.25rem 1rem rgb(0 0 0 / 7%);
+}
+
+.text-reader.text-reader--editorial .text-reader-notes {
+  border: 0;
+  border-inline-start: 3px solid var(--mat-sys-tertiary);
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-low);
+}
+
+.text-reader.text-reader--editorial .text-reader-notes h2 {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+}
+
+// Keep the original PDF viewer in a compact, tool-oriented workspace.
+.reader-page.reader-page--pdf-viewer .reader-page__heading {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+}
+
+.reader-page.reader-page--pdf-viewer .reader-page__subtitle {
+  max-width: 44rem;
+}
+
+.reader-page.reader-page--pdf-viewer .reader-import {
+  border-style: solid;
+  border-inline-start: 4px solid var(--mat-sys-primary);
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container);
+}
+
+.reader-page.reader-page--pdf-viewer .reader-toolbar {
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-high);
+}
+
+.reader-page.reader-page--pdf-viewer .reader-viewer {
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-high);
+}
