@@ -32,6 +32,10 @@
 
 .reader-page__heading h1 {
   margin: 0;
+  font: var(--mat-sys-headline-small);
+}
+
+.reader-page--document-open .reader-page__heading h1 {
   font: var(--mat-sys-title-large);
 }
 

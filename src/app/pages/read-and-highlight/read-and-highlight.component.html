@@ -1,4 +1,7 @@
-<main class="reader-page reader-page--pdf-viewer">
+<main
+  class="reader-page reader-page--pdf-viewer"
+  [class.reader-page--document-open]="!!activeDocument()"
+>
   <header class="reader-page__heading">
     <div>
       <h1>{{ 'reader.title' | t }}</h1>
