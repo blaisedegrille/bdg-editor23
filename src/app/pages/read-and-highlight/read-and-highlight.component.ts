@@ -13,6 +13,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatProgressBar } from '@angular/material/progress-bar';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import {
   AnnotationEditorEvent,
   AnnotationEditorLayerRenderedEvent,
@@ -50,11 +51,13 @@ const ANNOTATION_SAVE_DELAY_MS = 300;
     MatLabel,
     MatProgressBar,
     NgxExtendedPdfViewerModule,
+    RouterLink,
     TranslatePipe,
   ],
 })
 export class ReadAndHighlightComponent implements AfterViewInit, OnDestroy {
   private readonly host = inject(ElementRef<HTMLElement>);
+  private readonly route = inject(ActivatedRoute);
   private readonly renderer = inject(Renderer2);
   private readonly zone = inject(NgZone);
   private readonly auth = inject(AuthService);
@@ -85,7 +88,11 @@ export class ReadAndHighlightComponent implements AfterViewInit, OnDestroy {
   readonly loadingDocument = signal(false);
 
   constructor() {
-    void this.refreshDocuments();
+    void this.refreshDocuments().then(() => {
+      const documentId = this.route.snapshot.queryParamMap.get('documentId');
+      const document = this.documents().find((item) => item.id === documentId);
+      if (document) void this.openDocument(document);
+    });
   }
 
   ngAfterViewInit(): void {

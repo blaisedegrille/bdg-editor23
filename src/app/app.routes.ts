@@ -36,6 +36,14 @@ export const routes: Routes = [
         (module) => module.ReadAndHighlightComponent,
       ),
   },
+  {
+    path: 'read-text',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/read-text/read-text.component').then(
+        (module) => module.ReadTextComponent,
+      ),
+  },
   { path: 'dashboard', redirectTo: 'profile' },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'sign-in', component: SignInComponent },

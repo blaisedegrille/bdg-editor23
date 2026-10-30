@@ -43,3 +43,77 @@ body.dark {
 app-password-card .mat-expansion-panel-body {
   padding: 0 1rem 1rem;
 }
+
+// The extracted text is split into offset-bearing spans so highlights survive reflow.
+.text-reader-content {
+  width: min(100%, 75ch);
+  min-height: 60vh;
+  margin-inline: auto;
+  padding: clamp(1.25rem, 4vw, 3rem);
+  box-sizing: border-box;
+  color: var(--mat-sys-on-surface);
+  font-family: Georgia, 'Times New Roman', serif;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
+
+.text-reader-content__source {
+  margin: 0 0 1.5rem;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+  font-family: Roboto, sans-serif;
+}
+
+.text-reader-content h2 {
+  margin: 1.5em 0 0.5em;
+  line-height: 1.25;
+}
+
+.text-reader-content p {
+  margin: 0.75em 0;
+}
+
+.text-reader-content__bold {
+  font-weight: 700;
+}
+
+.text-reader-segment {
+  border-radius: 0.15rem;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.text-reader-segment--highlight {
+  padding: 0.02em 0;
+}
+
+.text-reader-segment--search {
+  outline: 2px solid var(--mat-sys-primary);
+  outline-offset: 1px;
+}
+
+.text-reader-separator {
+  display: block;
+  height: 0.5em;
+  overflow: hidden;
+  white-space: pre;
+}
+
+.text-reader-selection-actions {
+  position: fixed;
+  z-index: 1000;
+  display: flex;
+  padding: 0.25rem;
+  transform: translate(-50%, -100%);
+  border: 1px solid var(--mat-sys-outline-variant);
+  border-radius: var(--mat-sys-corner-medium);
+  background: var(--mat-sys-surface-container-high);
+  box-shadow: 0 0.375rem 1.125rem rgb(0 0 0 / 22%);
+}
+
+.text-reader-note-editor__actions,
+.text-reader-note__actions {
+  justify-content: flex-end;
+  gap: 0.25rem;
+}

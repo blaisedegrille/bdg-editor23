@@ -2,10 +2,17 @@ import { Injectable } from '@angular/core';
 import { DBSchema, openDB } from 'idb';
 import type { EditorAnnotation } from 'ngx-extended-pdf-viewer';
 
-import { ReadingDocument, ReadingNote, StoredAnnotations } from '../models/reading-document';
+import {
+  ExtractedTextDocument,
+  PdfJsHighlight,
+  ReadingDocument,
+  ReadingNote,
+  StoredAnnotations,
+  TextHighlight,
+} from '../models/reading-document';
 
 const DATABASE_NAME = 'bdg-editor23-reading.v1';
-const DATABASE_VERSION = 1;
+const DATABASE_VERSION = 3;
 
 interface StoredPdf {
   id: string;
@@ -25,6 +32,17 @@ interface ReadingDatabase extends DBSchema {
     value: ReadingNote;
     indexes: { 'by-document': string };
   };
+  pdfjsHighlights: {
+    key: string;
+    value: PdfJsHighlight;
+    indexes: { 'by-document': string };
+  };
+  extractedText: { key: string; value: ExtractedTextDocument };
+  textHighlights: {
+    key: string;
+    value: TextHighlight;
+    indexes: { 'by-document': string };
+  };
 }
 
 @Injectable({ providedIn: 'root' })
@@ -34,14 +52,37 @@ export class ReadingLibraryService {
     DATABASE_VERSION,
     {
       upgrade(database) {
-        const documents = database.createObjectStore('documents', {
-          keyPath: 'id',
-        });
-        documents.createIndex('by-owner', 'ownerId');
-        database.createObjectStore('files', { keyPath: 'id' });
-        database.createObjectStore('annotations', { keyPath: 'documentId' });
-        const notes = database.createObjectStore('notes', { keyPath: 'id' });
-        notes.createIndex('by-document', 'documentId');
+        if (!database.objectStoreNames.contains('documents')) {
+          const documents = database.createObjectStore('documents', {
+            keyPath: 'id',
+          });
+          documents.createIndex('by-owner', 'ownerId');
+        }
+        if (!database.objectStoreNames.contains('files')) {
+          database.createObjectStore('files', { keyPath: 'id' });
+        }
+        if (!database.objectStoreNames.contains('annotations')) {
+          database.createObjectStore('annotations', { keyPath: 'documentId' });
+        }
+        if (!database.objectStoreNames.contains('notes')) {
+          const notes = database.createObjectStore('notes', { keyPath: 'id' });
+          notes.createIndex('by-document', 'documentId');
+        }
+        if (!database.objectStoreNames.contains('pdfjsHighlights')) {
+          const highlights = database.createObjectStore('pdfjsHighlights', {
+            keyPath: 'id',
+          });
+          highlights.createIndex('by-document', 'documentId');
+        }
+        if (!database.objectStoreNames.contains('extractedText')) {
+          database.createObjectStore('extractedText', { keyPath: 'documentId' });
+        }
+        if (!database.objectStoreNames.contains('textHighlights')) {
+          const highlights = database.createObjectStore('textHighlights', {
+            keyPath: 'id',
+          });
+          highlights.createIndex('by-document', 'documentId');
+        }
       },
     },
   );
@@ -124,10 +165,63 @@ export class ReadingLibraryService {
     await (await this.database).delete('notes', id);
   }
 
+  async listPdfJsHighlights(documentId: string): Promise<PdfJsHighlight[]> {
+    const database = await this.database;
+    return database.getAllFromIndex('pdfjsHighlights', 'by-document', documentId);
+  }
+
+  async savePdfJsHighlight(highlight: PdfJsHighlight): Promise<void> {
+    await (await this.database).put('pdfjsHighlights', highlight);
+  }
+
+  async deletePdfJsHighlight(id: string): Promise<void> {
+    await (await this.database).delete('pdfjsHighlights', id);
+  }
+
+  async setPdfJsHighlightSyncPending(
+    id: string,
+    syncPending: boolean,
+  ): Promise<void> {
+    const database = await this.database;
+    const highlight = await database.get('pdfjsHighlights', id);
+    if (highlight) {
+      await database.put('pdfjsHighlights', { ...highlight, syncPending });
+    }
+  }
+
+  async getExtractedText(documentId: string): Promise<ExtractedTextDocument | undefined> {
+    return (await this.database).get('extractedText', documentId);
+  }
+
+  async saveExtractedText(content: ExtractedTextDocument): Promise<void> {
+    await (await this.database).put('extractedText', content);
+  }
+
+  async listTextHighlights(documentId: string): Promise<TextHighlight[]> {
+    const database = await this.database;
+    return database.getAllFromIndex('textHighlights', 'by-document', documentId);
+  }
+
+  async saveTextHighlight(highlight: TextHighlight): Promise<void> {
+    await (await this.database).put('textHighlights', highlight);
+  }
+
+  async deleteTextHighlight(id: string): Promise<void> {
+    await (await this.database).delete('textHighlights', id);
+  }
+
   async deleteDocument(id: string): Promise<void> {
     const database = await this.database;
     const transaction = database.transaction(
-      ['documents', 'files', 'annotations', 'notes'],
+      [
+        'documents',
+        'files',
+        'annotations',
+        'notes',
+        'pdfjsHighlights',
+        'extractedText',
+        'textHighlights',
+      ],
       'readwrite',
     );
     await transaction.objectStore('documents').delete(id);
@@ -136,6 +230,13 @@ export class ReadingLibraryService {
     const noteStore = transaction.objectStore('notes');
     const noteIds = await noteStore.index('by-document').getAllKeys(id);
     await Promise.all(noteIds.map((noteId) => noteStore.delete(noteId)));
+    const highlights = transaction.objectStore('pdfjsHighlights');
+    const highlightIds = await highlights.index('by-document').getAllKeys(id);
+    await Promise.all(highlightIds.map((highlightId) => highlights.delete(highlightId)));
+    await transaction.objectStore('extractedText').delete(id);
+    const textHighlights = transaction.objectStore('textHighlights');
+    const textHighlightIds = await textHighlights.index('by-document').getAllKeys(id);
+    await Promise.all(textHighlightIds.map((highlightId) => textHighlights.delete(highlightId)));
     await transaction.done;
   }
 }
